@@ -1,0 +1,22 @@
+{
+    "name": "DisasterSim.Editor",
+    "rootNamespace": "DisasterSim.Editor",
+    "references": [
+        "DisasterSim.Core",
+        "DisasterSim.Gameplay",
+        "DisasterSim.UI",
+        "Unity.AI.Navigation",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
