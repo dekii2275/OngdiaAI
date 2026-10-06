@@ -115,7 +115,8 @@
     }
   }
   function startNew() {
-    forceClosePanel(); stopWalking(); state = Model.fresh(); active = true;
+    const preferences={...state.settings};
+    forceClosePanel(); stopWalking(); state = Model.fresh(); state.settings={...preferences,reducedMotion:preferences.reducedMotion||window.matchMedia('(prefers-reduced-motion: reduce)').matches}; state.runId = window.StoryJourney.newRunId(); active = true;
     dispatch({ type: 'START' }, false); sound.setEnabled(state.settings.sound); sound.start(); playLine();
   }
   function continueGame() {
@@ -371,9 +372,10 @@
     const awards = Model.achievements(state);
     const calm = state.LockerAttempt === 0 || (state.LockerOpened && state.LockerAttempt === 1);
     const safety = state.SafetyIntervention ? 'Đã nghe cô Thảo và sơ tán cùng nhóm.' : state.EvacuatedWithoutBear ? 'Đã ưu tiên rời đi thay vì chờ lấy đồ.' : 'Đã lấy gấu trước khi cần rời đi và đi cùng cô.';
-    showPanel('results', `<span class="eyebrow">SCENE 1 HOÀN THÀNH</span><h2>Cơn Mưa Lớn</h2><p>Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.</p><div class="result-grid"><div class="result-card"><span>QUAN SÁT</span><p>${state.ClueBoardFound ? '✓ Phát hiện manh mối quan trọng.' : 'Lần sau, thử quan sát kỹ các vật trên tường.'}</p></div><div class="result-card"><span>SUY LUẬN</span><p>${state.LockerOpened ? '✓ Giải được mật mã đường đi.' : state.RouteUnderstood ? '✓ Hiểu quy luật của tuyến sơ tán.' : 'Gấu ở lại trong tủ. Bạn vẫn hoàn thành scene.'}</p></div><div class="result-card"><span>BÌNH TĨNH</span><p>${calm ? '✓ Không thử mật mã ngẫu nhiên nhiều lần.' : 'Dành thời gian quan sát trước khi thử lại.'}</p></div><div class="result-card"><span>AN TOÀN</span><p>✓ ${safety}</p></div></div><h3>Thành tích</h3>${awards.map(name => '<span class="achievement">✧ ' + name + '</span>').join('') || '<p>Đã hoàn thành sơ tán cùng cô Thảo.</p>'}<div class="journal-entry" style="margin-top:20px"><span class="eyebrow">SCENE 2 / GIỚI THIỆU</span><h3>Ba con đường</h3><p>Khảo sát ba tuyến và tìm đường lên điểm tập kết cùng cô Thảo, Duyên và bác Mạnh.</p><a class="primary" href="chapter02.html">Tiếp tục Chương 02 →</a></div><div class="button-row"><button id="replay" class="primary">Chơi lại scene 1</button><button id="back-title" class="secondary">Về màn hình đầu</button></div>`, false, true);
+    showPanel('results', `<span class="eyebrow">CHƯƠNG 01 HOÀN THÀNH</span><h2>Cơn Mưa Lớn</h2><p>Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.</p><div class="result-grid"><div class="result-card"><span>QUAN SÁT</span><p>${state.ClueBoardFound ? '✓ Phát hiện manh mối quan trọng.' : 'Lần sau, thử quan sát kỹ các vật trên tường.'}</p></div><div class="result-card"><span>SUY LUẬN</span><p>${state.LockerOpened ? '✓ Giải được mật mã đường đi.' : state.RouteUnderstood ? '✓ Hiểu quy luật của tuyến sơ tán.' : 'Gấu ở lại trong tủ. Bạn vẫn hoàn thành scene.'}</p></div><div class="result-card"><span>BÌNH TĨNH</span><p>${calm ? '✓ Không thử mật mã ngẫu nhiên nhiều lần.' : 'Dành thời gian quan sát trước khi thử lại.'}</p></div><div class="result-card"><span>AN TOÀN</span><p>✓ ${safety}</p></div></div><h3>Thành tích</h3>${awards.map(name => '<span class="achievement">✧ ' + name + '</span>').join('') || '<p>Đã hoàn thành sơ tán cùng cô Thảo.</p>'}<div class="journal-entry" style="margin-top:20px"><span class="eyebrow">HÀNH TRÌNH TIẾP TỤC · 09:12</span><h3>Ba con đường</h3><p>Khảo sát ba tuyến và tìm đường lên điểm tập kết cùng cô Thảo, Duyên và bác Mạnh.</p><a id="next-chapter" class="primary" href="chapter02.html?from=chapter01">Ra cổng trường · Chương 02 →</a></div><div class="button-row"><button id="replay" class="primary">Chơi lại scene 1</button><button id="back-title" class="secondary">Về màn hình đầu</button></div>`, false, true);
+    $('next-chapter').onclick = () => { save(); stopWalking(); };
     $('replay').onclick = startNew;
-    $('back-title').onclick = () => { forceClosePanel(); active = false; saved = readSave(); $('continue').hidden = !saved; state = Model.fresh(); render(); };
+    $('back-title').onclick = () => { forceClosePanel(); active = false; updateJourneyTitle(); saved = readSave(); $('continue').hidden = !saved; state = Model.fresh(); render(); };
   }
   function showSettings() {
     showPanel('settings', `<span class="eyebrow">CÀI ĐẶT & HƯỚNG DẪN</span><h2>Chơi theo nhịp của bạn</h2><p>WASD hoặc phím mũi tên: di chuyển. E: tương tác khi đứng gần. Bấm/chạm: khám phá đồ vật. Enter hoặc Space: đọc tiếp. Esc: đóng cửa sổ. I: túi đồ. J: sổ tay.</p><p>Không có đếm ngược thực. Ba chấm là thời gian chuẩn bị còn lại; chỉ mất một chấm khi xác nhận mã sai. Bỏ lại gấu vẫn hoàn thành scene.</p><div class="button-row"><button id="toggle-motion" class="secondary">${state.settings.reducedMotion ? 'Bật' : 'Giảm'} chuyển động</button><button id="toggle-spots" class="secondary">${state.settings.showSpots ? 'Ẩn' : 'Hiện'} vùng tương tác</button><button id="toggle-audio" class="secondary">${state.settings.sound ? 'Tắt' : 'Bật'} âm thanh</button></div><div class="note">Tiến trình được lưu tự động trên trình duyệt này. Nếu trình duyệt chặn lưu trữ, trò chơi vẫn chạy trong phiên hiện tại.</div>${active ? '<div class="button-row"><button id="return-title" class="secondary">Lưu và về màn hình đầu</button></div>' : ''}`);
@@ -566,7 +568,16 @@
   });
   $('touch-interact').onclick = () => { if (canMove()) { const near = nearestSpot(); if (near) interact(near.id); } };
   window.addEventListener('resize', resizeRain); new ResizeObserver(resizeRain).observe($('stage'));
-  saved = readSave(); $('continue').hidden = !saved;
+  function updateJourneyTitle(){
+    const raw=window.StoryJourney.read(window.StoryJourney.keys.chapter02);
+    const valid=window.StoryJourney.canContinue(window.StoryJourney.read(window.StoryJourney.keys.chapter01),raw);
+    $('continue-journey').hidden=!valid;
+    if(valid)$('continue-journey').textContent=raw.complete?'Xem lại hành trình · Chương 02 →':'Tiếp tục hành trình · Chương 02 →';
+    $('chapter-two-entry').href=window.StoryJourney.readOrigin()?'chapter02.html?from=chapter01':'chapter02.html';
+  }
+  updateJourneyTitle();
+  window.addEventListener('pageshow',updateJourneyTitle);
+  saved = readSave(); if(saved)state.settings={...saved.settings}; $('continue').hidden = !saved;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) state.settings.reducedMotion = true;
   render(); loadAssets(); resizeRain(); requestAnimationFrame(animate);
 })();

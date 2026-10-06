@@ -1,5 +1,7 @@
 # Game giải đố cốt truyện 2D
 
+**Chương 01 → 02 đã nối thành một hành trình.** Chơi từ `http://localhost:4173`; ở cuối Chương 01 chọn **Ra cổng trường · Chương 02**. Game giữ lựa chọn về gấu bông, điều đã quan sát và cài đặt; trên trang đầu có nút tiếp tục đúng hành trình đang chơi. Xem [hướng dẫn hành trình](Docs/Journey-implementation.md).
+
 ## Chơi Scene 1 ngay, không cần Unity
 
 Scene **Cơn Mưa Lớn** đã được triển khai bằng HTML, CSS và JavaScript thuần, bám theo [kịch bản chương 1](Docs/Chapter01.md).

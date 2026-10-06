@@ -32,3 +32,6 @@
 .match-row select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #puzzle-feedback{min-height:25px;color:var(--gold)!important}
 @media(max-width:760px){.spot.route-arrow{width:44px;height:44px;min-width:0}.arrow-tip{max-width:210px}.puzzle-slots{grid-template-columns:1fr}.match-row{grid-template-columns:1fr;gap:8px}.match-row select{font-size:12px}.puzzle-cards button{flex-basis:100%;font-size:12px}}
+
+#intro .journey-summary{font-size:12px;line-height:1.8;max-width:470px;border-left:2px solid var(--gold);padding:8px 14px;background:#102328aa;margin:12px 0 0}.journey-summary+button{margin-top:10px!important}
+@media(max-width:760px){#intro:has(.journey-summary:not([hidden])){padding-top:34px}#intro:has(.journey-summary:not([hidden])) h1{font-size:60px;margin:14px 0}.journey-summary{max-width:100%}}

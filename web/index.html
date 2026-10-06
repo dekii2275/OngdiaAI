@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="typography.css">
   <link rel="stylesheet" href="evacuation-map.css">
+  <script defer src="js/journey.js"></script>
   <script defer src="js/navigation.js"></script>
   <script defer src="js/model.js"></script>
   <script defer src="js/story.js"></script>
@@ -54,7 +55,8 @@
         <div class="title-rule"></div><p>09:00 sáng. Một buổi ra chơi.<br>Và cơn mưa chưa có dấu hiệu dừng lại.</p>
         <button id="start" class="primary">Bắt đầu câu chuyện <span>→</span></button>
         <button id="continue" class="text-button" hidden>Tiếp tục lần chơi trước</button>
-        <a href="chapter02.html" class="text-button" style="margin-top:12px;color:#d5bd87">Chương 02 · Ba con đường →</a>
+        <a id="continue-journey" href="chapter02.html?continue=1" class="text-button" hidden>Tiếp tục hành trình · Chương 02 →</a>
+        <a id="chapter-two-entry" href="chapter02.html" class="text-button" style="margin-top:12px;color:#d5bd87">Chương 02 · Ba con đường →</a>
         <span class="title-foot">KHÁM PHÁ · SUY LUẬN · ĐI CÙNG NHAU</span>
       </div>
       <section id="dialogue" class="dialogue" aria-label="Hội thoại" hidden>

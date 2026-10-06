@@ -8,7 +8,7 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const chromePath = process.env.CHROME_PATH || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const baseURL = process.env.GAME_URL || 'http://localhost:4173';
 let browser, socket;
-const watchdog = setTimeout(() => { console.error('Browser QA timed out'); socket?.close(); browser?.kill(); process.exitCode = 1; }, 180000);
+const watchdog = setTimeout(() => { console.error('Browser QA timed out'); socket?.close(); browser?.kill(); process.exitCode = 1; }, 240000);
 (async () => {
   const profile = await fs.mkdtemp(path.join(root, 'tmp', 'chrome-'));
   browser = spawn(chromePath, ['--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--remote-debugging-port=9337', '--user-data-dir=' + profile, 'about:blank'], { windowsHide: true, stdio: 'ignore' });
@@ -64,6 +64,26 @@ const watchdog = setTimeout(() => { console.error('Browser QA timed out'); socke
     }
     await click('#next'); if (++count > 150) throw new Error('Dialogue stalled');
   } };
+  async function verifyHandoff(hasBear){
+    const before=await readState();
+    await click('#next-chapter');await wait(600);
+    assert.equal(await evaluate("document.querySelector('#intro').hidden"),true,'chapter link enters the story without a second title screen');
+    const linked=await evaluate("JSON.parse(localStorage.getItem('ongdia.chapter02.v2'))");
+    assert.equal(linked.origin.id,before.runId);assert.equal(linked.origin.hasBear,hasBear);
+    assert.equal(linked.scene,'gate');assert.equal(linked.started,true);
+    assert.equal(linked.settings.sound,before.settings.sound);assert.equal(linked.settings.reduced,before.settings.reducedMotion);
+    assert.equal(await evaluate("document.querySelector('#party .girl').src.endsWith('/bear.png')"),hasBear);
+    assert.match(await evaluate("document.querySelector('#line').textContent"),/Gấu/);
+    await evaluate("(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(i=>i.decode()));})()");
+    await screenshot(hasBear?'handoff-with-bear':'handoff-without-bear');await drain();
+    await click('#journal');assert.match(await evaluate("document.querySelector('#panel').textContent"),hasBear?/Duyên đã lấy được gấu/:/gấu bông|Gấu bông/);await click('#close-panel');
+    await send('Page.navigate',{url:baseURL+'/web/index.html'});await wait(500);
+    assert.equal(await evaluate("document.querySelector('#continue-journey').hidden"),false);
+    await click('#continue-journey');await wait(500);assert.equal(await evaluate("document.querySelector('#intro').hidden"),true);
+    assert.equal((await evaluate("JSON.parse(localStorage.getItem('ongdia.chapter02.v2'))")).origin.id,before.runId);
+    await send('Page.navigate',{url:baseURL+'/web/index.html'});await wait(500);await click('#continue');
+    assert.equal((await readState()).Scene1Completed,true);
+  }
   const screenshotDirectory = path.join(root, 'output', 'qa', 'map');
   const screenshot = async name => { await evaluate("document.querySelector('#toast')?.setAttribute('hidden','')"); const shot = await send('Page.captureScreenshot', { format: 'png' }); await fs.writeFile(path.join(screenshotDirectory, name + '.png'), Buffer.from(shot.data, 'base64')); };
   await fs.mkdir(screenshotDirectory, { recursive: true });
@@ -181,7 +201,7 @@ const watchdog = setTimeout(() => { console.error('Browser QA timed out'); socke
   await screenshot('05-safety-rules'); await click('#understood'); await drain();
   assert.equal((await readState()).phase, 'hallway'); await screenshot('06-hallway');
   for (let i = 0; i < 3; i++) { await click('[data-spot="follow"]'); await drain(); }
-  assert.equal((await readState()).Scene1Completed, true); await screenshot('07-results');
+  assert.equal((await readState()).Scene1Completed, true); await screenshot('07-results');await verifyHandoff(true);
   // Second branch: two wrong codes, voluntarily leave at the last choice.
   await click('#replay'); await drain(); await click('[data-spot="duyen"]'); await drain(); await click('#choice-search'); await drain();
   async function wrong() {
@@ -193,7 +213,7 @@ const watchdog = setTimeout(() => { console.error('Browser QA timed out'); socke
   assert.equal((await readState()).LeftAtLowTime, true);
   await click('#understood'); await drain();
   for (let i = 0; i < 3; i++) { await click('[data-spot="follow"]'); await drain(); }
-  assert.equal((await readState()).EvacuatedWithoutBear, true); assert.equal((await readState()).Scene1Completed, true);
+  assert.equal((await readState()).EvacuatedWithoutBear, true); assert.equal((await readState()).Scene1Completed, true);await verifyHandoff(false);
   // Third branch: all three wrong attempts lead to safety intervention, never Game Over.
   await click('#replay'); await drain(); await click('[data-spot="duyen"]'); await drain(); await click('#choice-search'); await drain();
   await wrong(); await wrong(); await click('#last-try'); await drain();

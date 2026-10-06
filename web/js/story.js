@@ -45,6 +45,6 @@ window.SceneStory = (() => {
     'hallway-start': [N('Cửa lớp mở ra. Âm thanh mưa rõ hơn. Những lớp khác đang đi theo giáo viên.'), T('Hai em. Đi sát cô.'), B('Dạ.'), D('Dạ.'), N('Đi theo cô Thảo tới ngã rẽ. Bấm vào cô hoặc di chuyển đến gần rồi nhấn E. Không tách nhóm, không quay lại lớp.')],
     'walking-bear': [D('Lúc nãy tớ chỉ nghĩ tới Gấu thôi.'), B('Cậu lo cho nó mà.'), D('Ừ. Nhưng lần sau nếu cô bảo đi ngay... tớ sẽ đi ngay.'), B('Ừ.')],
     'walking-no-bear': [D('Tớ vẫn lo cho Gấu.'), B('Nó đang ở trong tủ. Khi an toàn mình sẽ hỏi cô.'), D('Ừ. Ít nhất mình đang đi cùng nhau.'), B('Ừ.')],
-    fork: [N('Ba người tới một ngã rẽ. Lối phía đông có nước chảy qua và dây cảnh báo. Bên phải là cầu thang lên khu nhà khác.'), D('Đây là đường trên sơ đồ...'), B('Nhưng bác Mạnh vừa bảo không đi.'), T('Đúng. Đây là lúc chúng ta phải chọn đường an toàn.'), R('Mạnh', 'Cô Thảo.'), T('Tôi nghe.'), R('Mạnh', 'Tôi tìm được một lối khác.'), N('Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.')]
+    fork: [N('Ba người tới cuối hành lang. Lối phía đông có nước chảy qua và dây cảnh báo. Cổng phụ dẫn ra đường làng.'), D('Đây là đường trên sơ đồ...'), B('Nhưng bác Mạnh vừa bảo không đi.'), T('Đúng. Đây là lúc chúng ta phải chọn đường an toàn.'), R('Mạnh', 'Cô Thảo.'), T('Tôi nghe.'), R('Mạnh', 'Ra cổng phụ rồi khảo sát các tuyến đường làng. Tôi đang kiểm tra cầu phía Bắc.'), N('Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.')]
   };
 })();

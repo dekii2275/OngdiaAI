@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e20"><title>Ba con đường — Chương 02</title>
   <link rel="stylesheet" href="typography.css"><link rel="stylesheet" href="chapter02.css">
-  <script defer src="js/chapter02-puzzles.js"></script><script defer src="js/audio.js"></script><script defer src="js/chapter02-data.js"></script><script defer src="js/chapter02.js"></script>
+  <script defer src="js/journey.js"></script><script defer src="js/chapter02-puzzles.js"></script><script defer src="js/audio.js"></script><script defer src="js/chapter02-data.js"></script><script defer src="js/chapter02.js"></script>
 </head>
 <body>
 <main class="shell">
@@ -17,7 +17,7 @@
     <img id="manh-world" src="assets/characters/manh/idle.png" alt="Bác Mạnh kiểm tra đường" hidden>
     <div id="party" aria-label="Bạn, Duyên và cô Thảo"><img class="companion teacher" src="assets/characters/thao/idle.png" alt="Cô Thảo"><img id="player" src="assets/characters/ban/idle.png" alt="Bạn"><img class="companion girl" src="assets/characters/duyen/idle.png" alt="Duyên"></div>
     <div id="location-toast" role="status"></div>
-    <div id="intro"><small>CHƯƠNG THỨ HAI · 09:12 SÁNG</small><h1>Ba con<br><em>đường</em></h1><div class="rule"></div><p>Một điểm đến. Ba lựa chọn.<br>Đường gần nhất chưa chắc đưa ta về nhà.</p><button id="start" class="primary">Bước vào cơn mưa <span>→</span></button><button id="resume" hidden>Tiếp tục hành trình</button><a href="index.html">← Trở về chương 01</a><small class="intro-foot">QUAN SÁT · SUY LUẬN · ĐI CÙNG NHAU</small></div>
+    <div id="intro"><small>CHƯƠNG THỨ HAI · 09:12 SÁNG</small><h1>Ba con<br><em>đường</em></h1><div class="rule"></div><p>Một điểm đến. Ba lựa chọn.<br>Đường gần nhất chưa chắc đưa ta về nhà.</p><button id="start" class="primary">Bước vào cơn mưa <span>→</span></button><p id="journey-summary" class="journey-summary" hidden></p><button id="resume" hidden>Tiếp tục hành trình</button><a href="index.html">← Trở về chương 01</a><small class="intro-foot">QUAN SÁT · SUY LUẬN · ĐI CÙNG NHAU</small></div>
     <section id="dialogue" hidden aria-label="Hội thoại"><img id="portrait" alt=""><div><small id="speaker"></small><p id="line" aria-live="polite"></p></div><button id="next">Tiếp tục ↵</button></section>
   </section>
   <footer><span class="help"><kbd>WASD</kbd> di chuyển <kbd>E</kbd> tương tác · Bấm để đi</span><nav><button id="map">Bản đồ <kbd>M</kbd></button><button id="journal">Sổ tay <kbd>J</kbd></button><button id="settings">Cài đặt</button></nav><small id="save">TỰ ĐỘNG LƯU</small></footer>

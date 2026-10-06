@@ -5,7 +5,7 @@
   const CODE = ['↑', '→', '↑', '→'];
   const DIRECTIONS = ['↑', '→', '↓', '←'];
   const fresh = () => ({
-    version: 1, started: false, phase: 'intro', location: 'exterior',
+    version: 1, runId: null, started: false, phase: 'intro', location: 'exterior',
     SafeTime: 3, LockerOpened: false, EvacuatedWithoutBear: false,
     ClueBoardFound: false, RouteUnderstood: false, LockerAttempt: 0,
     Scene1Completed: false, SafetyIntervention: false, PrioritizedLeaving: false,
@@ -96,6 +96,7 @@
   function restore(raw) {
     if (!raw || raw.version !== 1 || typeof raw.started !== 'boolean' || !PHASES.includes(raw.phase)) return null;
     const s = fresh();
+    s.runId = typeof raw.runId === 'string' && /^[a-zA-Z0-9-]{1,80}$/.test(raw.runId) ? raw.runId : null;
     for (const key of ['started', 'LockerOpened', 'EvacuatedWithoutBear', 'ClueBoardFound', 'RouteUnderstood', 'Scene1Completed', 'SafetyIntervention', 'PrioritizedLeaving', 'LeftAtLowTime', 'TriedBeforeClue', 'routeStarted', 'hallwayTalked', 'LastChoiceMade', 'escortMoving']) s[key] = raw[key] === true;
     s.SafeTime = Number.isInteger(raw.SafeTime) ? Math.max(0, Math.min(3, raw.SafeTime)) : 3;
     s.LockerAttempt = Number.isInteger(raw.LockerAttempt) ? Math.max(0, raw.LockerAttempt) : 0;
