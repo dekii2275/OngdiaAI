@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nhân vật — Cơn Mưa Lớn</title>
+  <link rel="stylesheet" href="typography.css">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#142521;color:#eee6ce;padding:32px;font-family:var(--font-ui)}
+    main{max-width:1400px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:28px}
+    h1,h2{font-family:var(--font-story);font-weight:400}h1{margin:0 0 12px}p{color:#afbbab;line-height:1.8}a{color:#dac08a}
+    .cast{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}article{padding:16px;background:#20352e;border:1px solid #a99c6933;border-radius:8px}
+    h2{margin:6px 0 16px;font-size:24px}.actor{height:360px;width:100%;object-fit:contain;display:block;background:radial-gradient(ellipse,#6b766355,transparent 75%)}
+    .portrait-row{display:flex;gap:14px;align-items:center;margin-top:16px}.portrait-row img{width:84px;height:84px;object-fit:contain;background:#9ba18b;border-radius:6px}
+    .portrait-row span{font-size:12px;color:#b7c0ac;line-height:1.8}.poses{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+    button{font:inherit;font-size:12px;background:transparent;color:#d8c9a2;border:1px solid #9caa7a66;border-radius:5px;padding:8px;cursor:pointer}
+    button[aria-pressed=true]{background:#c1a367;color:#142521}footer{margin-top:24px;font-size:13px}
+    @media(max-width:1000px){.cast{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:600px){body{padding:20px}.cast{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}header{display:block}.actor{height:260px}.portrait-row{display:block}.portrait-row span{display:block;margin-top:8px}article{padding:12px}h2{font-size:21px}}
+  </style>
+  <script defer src="js/characters.js"></script>
+</head>
+<body>
+  <main>
+    <header><div><h1>Nhân vật trong câu chuyện</h1><p>Ảnh toàn thân, chân dung và các tư thế của từng nhân vật.</p></div><a href="index.html">Vào trò chơi →</a></header>
+    <section class="cast" id="cast" aria-label="Bộ nhân vật"></section>
+    <footer>Đủ năm nhân vật: Bạn · Duyên · cô Thảo · Minh Anh · bác Mạnh.</footer>
+  </main>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const labels = {idle:'Đứng', 'walk-1':'Bước dài', 'walk-2':'Chuyển bước', bear:'Ôm gấu'};
+      for (const character of Object.values(SceneCharacters.cast)) {
+        const card=document.createElement('article'), title=document.createElement('h2'), actor=new Image(), portrait=new Image();
+        title.textContent=character.name; actor.src=character.images.idle; actor.alt='Ảnh toàn thân '+character.name; actor.className='actor';
+        portrait.src=character.portrait; portrait.alt='Chân dung '+character.name;
+        const row=document.createElement('div');row.className='portrait-row'; const note=document.createElement('span');note.textContent='Chân dung hội thoại';row.append(portrait,note);
+        const poses=document.createElement('div');poses.className='poses';
+        for(const [pose,source] of Object.entries(character.images)){
+          const button=document.createElement('button');button.textContent=labels[pose];button.setAttribute('aria-pressed',pose==='idle');
+          button.onclick=()=>{actor.src=source;actor.alt=character.name+' · '+labels[pose];for(const b of poses.children)b.setAttribute('aria-pressed',b===button);};poses.append(button);
+        }
+        card.append(title,actor,row,poses);document.getElementById('cast').append(card);
+      }
+    });
+  </script>
+</body>
+</html>

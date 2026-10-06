@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142524">
+  <title>Cơn Mưa Lớn — Chương 01</title>
+  <link rel="preload" href="assets/fonts/BeVietnamPro-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Lora-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="typography.css">
+  <link rel="stylesheet" href="evacuation-map.css">
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/model.js"></script>
+  <script defer src="js/story.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/characters.js"></script>
+  <script defer src="js/evacuation-map.js"></script>
+  <script defer src="js/game.js"></script>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">雨</span><div><span class="eyebrow">MỘT CÂU CHUYỆN TRONG LÀNG</span><span class="brand-title">Cơn Mưa Lớn</span></div></div>
+      <div class="chapter-label">CHƯƠNG 01 <span> / </span> LỚP 4B</div>
+      <div class="tools">
+        <button id="sound" class="icon-button" aria-label="Bật âm thanh" title="Âm thanh">♪</button>
+        <button id="settings" class="icon-button" aria-label="Cài đặt và hướng dẫn" title="Cài đặt">⚙</button>
+      </div>
+    </header>
+    <section id="stage" class="stage" aria-label="Không gian trò chơi">
+      <div id="world" class="world exterior"><div id="background" class="background"></div>
+        <div class="weather-tint"></div><canvas id="rain" class="rain" aria-hidden="true"></canvas>
+        <div id="props" class="props" aria-hidden="true"></div>
+        <div id="hotspots" class="hotspots"></div>
+        <div id="player-shadow" class="foot-shadow" aria-hidden="true"></div>
+        <div id="duyen-shadow" class="foot-shadow" aria-hidden="true"></div>
+        <div id="thao-shadow" class="foot-shadow" aria-hidden="true"></div>
+        <div id="walk-marker" class="walk-marker" hidden aria-hidden="true"></div>
+        <canvas id="player" class="character player" width="170" height="490" aria-label="Bạn"></canvas>
+        <canvas id="duyen" class="character duyen" width="150" height="490" aria-label="Duyên"></canvas>
+        <canvas id="thao" class="character thao" width="150" height="490" aria-label="Cô Thảo"></canvas>
+        <div class="foreground foreground-left" aria-hidden="true"></div>
+        <div class="foreground foreground-right" aria-hidden="true"></div>
+        <div id="world-caption" class="world-caption"></div><div id="lightning" class="lightning"></div>
+      </div>
+      <div id="hud" class="hud" hidden>
+        <div class="objective-card"><span class="eyebrow">NHIỆM VỤ HIỆN TẠI</span><p id="objective"></p><span id="location-label" class="location-label"></span></div>
+        <div id="safe-card" class="safe-card"><span class="eyebrow">THỜI GIAN AN TOÀN</span><div id="safe-dots" aria-live="polite"></div><small>Quan sát. Bình tĩnh. Đi cùng nhau.</small></div>
+      </div>
+      <div id="near-label" class="near-label" hidden></div>
+      <div id="title-screen" class="title-screen">
+        <span class="eyebrow">CHƯƠNG ĐẦU TIÊN</span><h1>Cơn Mưa<br><em>Lớn</em></h1>
+        <div class="title-rule"></div><p>09:00 sáng. Một buổi ra chơi.<br>Và cơn mưa chưa có dấu hiệu dừng lại.</p>
+        <button id="start" class="primary">Bắt đầu câu chuyện <span>→</span></button>
+        <button id="continue" class="text-button" hidden>Tiếp tục lần chơi trước</button>
+        <a href="chapter02.html" class="text-button" style="margin-top:12px;color:#d5bd87">Chương 02 · Ba con đường →</a>
+        <span class="title-foot">KHÁM PHÁ · SUY LUẬN · ĐI CÙNG NHAU</span>
+      </div>
+      <section id="dialogue" class="dialogue" aria-label="Hội thoại" hidden>
+        <canvas id="portrait" width="150" height="160" class="portrait" aria-hidden="true"></canvas>
+        <div class="dialogue-body"><div class="speaker-row"><span id="speaker"></span><span id="speaker-role"></span></div><p id="line" aria-live="polite"></p></div>
+        <button id="next" class="next-button" aria-label="Tiếp tục hội thoại">Tiếp tục <span>↵</span></button>
+      </section>
+      <div id="overlay" class="overlay" hidden><section id="panel" class="panel" role="dialog" aria-modal="true" aria-label="Tương tác"></section></div>
+      <div id="toast" class="toast" role="status" hidden></div>
+      <div class="vignette" aria-hidden="true"></div>
+    </section>
+    <footer class="bottom-bar">
+      <div class="controls-help"><span>Bấm để đi &amp; khám phá</span><span class="help-divider">·</span><kbd>WASD</kbd><span>di chuyển</span><kbd>E</kbd><span>tương tác gần</span></div>
+      <div class="footer-actions"><button id="hint">✧ <span>Gợi ý</span></button><button id="journal">▤ <span>Sổ tay</span><i id="journal-dot" hidden></i></button><button id="inventory">▱ <span>Túi đồ</span><span id="item-count">0</span></button></div>
+      <div id="save-status" class="save-status">TỰ ĐỘNG LƯU</div>
+    </footer>
+    <nav id="touch-controls" class="touch-controls" aria-label="Di chuyển trên điện thoại"><button data-move="ArrowLeft" aria-label="Đi trái">←</button><button data-move="ArrowUp" aria-label="Đi lên">↑</button><button data-move="ArrowDown" aria-label="Đi xuống">↓</button><button data-move="ArrowRight" aria-label="Đi phải">→</button><button id="touch-interact">E</button></nav>
+  </main>
+</body>
+</html>

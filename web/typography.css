@@ -1,0 +1,62 @@
+/* Full Vietnamese glyph sets, bundled locally under SIL Open Font License. */
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('assets/fonts/BeVietnamPro-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('assets/fonts/BeVietnamPro-SemiBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lora';
+  src: url('assets/fonts/Lora-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+:root {
+  --font-ui: 'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif;
+  --font-story: 'Lora', Georgia, 'Times New Roman', serif;
+  font-family: var(--font-ui);
+}
+body, button, kbd, .eyebrow, .chapter-label, .hotspot-label,
+.location-label, .safe-card small, .world-caption small, .title-foot,
+#speaker-role, .next-button, .bottom-bar, .footer-actions button,
+.choice small, .panel .note, .route-map button, .route-label,
+.rules-list small, .result-card span, .achievement, .toast, .near-label,
+.wall-clock span, .wall-poster, .east-sign, .route-map text {
+  font-family: var(--font-ui);
+}
+.brand-title, .title-screen h1, .world-caption, .panel h2, .panel h3,
+#speaker, .chalk-title { font-family: var(--font-story); }
+.eyebrow, .chapter-label, .title-foot, #speaker-role, .result-card span {
+  line-height: 1.8;
+  letter-spacing: 1px;
+}
+.title-screen h1 { line-height: 1.25; letter-spacing: -.5px; }
+.title-screen p, .dialogue-body p, .panel p { line-height: 1.85; }
+.dialogue-body p { font-size: clamp(15px, 1.25vw, 19px); }
+.brand .eyebrow, .objective-card .eyebrow, .safe-card .eyebrow {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.objective-card p { font-size: 14px; line-height: 1.65; }
+.controls-help, .footer-actions button, .near-label, .hotspot-label,
+.toast, .next-button { font-size: 12px; line-height: 1.7; }
+.portrait { background: radial-gradient(ellipse at 50% 40%, #c6b996, #8a8e76); border-color: #bcad7740; }
+@media (max-width: 650px) {
+  .brand .eyebrow, .objective-card .eyebrow, .safe-card .eyebrow {
+    font-size: 9px;
+    letter-spacing: .5px;
+  }
+  .objective-card p { font-size: 12px; }
+  .dialogue-body p { font-size: 14px; line-height: 1.8; }
+  #speaker-role { letter-spacing: .3px; }
+  .footer-actions button { font-size: 11px; }
+}
