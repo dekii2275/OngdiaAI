@@ -9,6 +9,8 @@
   let telemetry = null;
   let scenarioConfig = null;
   let soundEnabled = true;
+  let speechEngine = null;
+  let ambientEngine = null;
   let idleTimer = null;
   let minhChatTurns = 0;
   let currentRecapIndex = 0;
@@ -255,6 +257,9 @@
     if (els.speakerName) els.speakerName.textContent = speaker;
     if (els.speechText) els.speechText.textContent = text;
     updateSpeakerPortrait(charId, emotion);
+    if (soundEnabled && speechEngine && text) {
+      speechEngine.speak(text);
+    }
   }
 
   function renderChoices(choices) {
@@ -617,6 +622,8 @@
       els.btnSound.onclick = () => {
         soundEnabled = !soundEnabled;
         els.btnSound.textContent = soundEnabled ? '🔊 Âm thanh: Bật' : '🔇 Âm thanh: Tắt';
+        if (speechEngine) speechEngine.toggle(soundEnabled);
+        if (ambientEngine) ambientEngine.toggle(soundEnabled);
       };
     }
 
@@ -627,6 +634,9 @@
           els.speechText.style.animation = 'none';
           void els.speechText.offsetWidth;
           els.speechText.style.animation = 'speechPulse 0.5s ease';
+          if (soundEnabled && speechEngine && els.speechText.textContent) {
+            speechEngine.speak(els.speechText.textContent);
+          }
         }
       };
     }
@@ -849,6 +859,13 @@
 
     if (window.TelemetryLogger) {
       telemetry = new window.TelemetryLogger('session-' + Date.now());
+    }
+
+    if (window.VietnameseSpeechEngine) {
+      speechEngine = new window.VietnameseSpeechEngine();
+    }
+    if (window.ProceduralStormAmbient) {
+      ambientEngine = new window.ProceduralStormAmbient();
     }
 
     renderCurrentState();
