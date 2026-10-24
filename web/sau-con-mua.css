@@ -189,10 +189,39 @@ body {
 #dialogue-box {
   background: var(--color-cream);
   border-top: 3px solid #648264;
-  padding: 16px 24px;
+  padding: 14px 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.dialogue-avatar-wrap {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #648264;
+  background: #FFF;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.speaker-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.dialogue-content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  flex: 1;
 }
 
 .speaker-tag {

@@ -26,6 +26,7 @@
     els.charTeacher = document.getElementById('char-teacher');
 
     els.dialogueBox = document.getElementById('dialogue-box');
+    els.speakerAvatar = document.getElementById('speaker-avatar');
     els.speakerName = document.getElementById('speaker-name');
     els.speechText = document.getElementById('speech-text');
     els.choiceButtons = document.getElementById('choice-buttons');
@@ -160,9 +161,17 @@
     }
   }
 
-  function renderDialogue(speaker, text) {
+  function updateSpeakerPortrait(charId, emotion) {
+    if (!els.speakerAvatar) return;
+    const cid = charId || 'teacher';
+    const emo = emotion || 'neutral';
+    els.speakerAvatar.src = `assets/sau-con-mua/portraits/${cid}_${emo}.png`;
+  }
+
+  function renderDialogue(speaker, text, charId, emotion) {
     if (els.speakerName) els.speakerName.textContent = speaker;
     if (els.speechText) els.speechText.textContent = text;
+    updateSpeakerPortrait(charId, emotion);
   }
 
   function renderChoices(choices) {
@@ -213,7 +222,7 @@
 
     if (res.movement === 'blocked') {
       playAlertSound();
-      renderDialogue('Cô Hương', res.feedback || 'Khu vực đó nguy hiểm. Chúng ta cần ở cùng nhóm và tuân theo hướng dẫn!');
+      renderDialogue('Cô Hương', res.feedback || 'Khu vực đó nguy hiểm. Chúng ta cần ở cùng nhóm và tuân theo hướng dẫn!', 'teacher', 'serious');
       return;
     }
 
@@ -648,7 +657,7 @@
 
     if (stageId === 'S1') {
       setView('school');
-      renderDialogue('Cô Hương', 'Mưa đã kéo dài. Các em ở cùng cô nhé. Có điều gì làm em lo, hãy nói với cô!');
+      renderDialogue('Cô Hương', 'Mưa đã kéo dài. Các em ở cùng cô nhé. Có điều gì làm em lo, hãy nói với cô!', 'teacher', 'neutral');
       renderChoices([
         { id: 'report_teacher', label: 'Báo cô Hương' },
         { id: 'approach_cue', label: 'Đi gần hơn để xem' },
@@ -659,7 +668,7 @@
 
     if (stageId === 'S2') {
       setView('school');
-      renderDialogue('Cô Hương', 'Em thấy điều gì, ở đâu?');
+      renderDialogue('Cô Hương', 'Em thấy điều gì, ở đâu?', 'teacher', 'encouraging');
       renderChoices([
         { id: 'describe_crack', label: 'Có vệt nứt trên lối đất ngoài hàng rào.' },
         { id: 'need_help_describing', label: 'Em chưa biết nói thế nào.' },
@@ -676,7 +685,7 @@
 
     if (stageId === 'S3') {
       setView('route');
-      renderDialogue('Bạn Minh', 'Tớ để quên bức tranh ở chỗ cũ. Tớ muốn quay lại lấy.');
+      renderDialogue('Bạn Minh', 'Tớ để quên bức tranh ở chỗ cũ. Tớ muốn quay lại lấy.', 'minh', 'worried');
       renderChoices([
         { id: 'continue_with_teacher', label: 'Mình đi cùng cô trước nhé' },
         { id: 'ask_teacher', label: 'Nhờ cô giúp Minh' },
@@ -688,7 +697,7 @@
 
     if (stageId === 'S4') {
       setView('route');
-      renderDialogue('Cô Hương', 'Cô vừa nhận hướng dẫn. Các em chú ý di chuyển theo lối an toàn cô chỉ dẫn nhé.');
+      renderDialogue('Cô Hương', 'Cô vừa nhận hướng dẫn. Các em chú ý di chuyển theo lối an toàn cô chỉ dẫn nhé.', 'teacher', 'neutral');
       renderChoices([
         { id: 'guided_route', label: 'Đi theo lối cô chỉ' },
         { id: 'closed_shortcut', label: 'Chọn lối tắt đã đóng' }
@@ -698,7 +707,7 @@
 
     if (stageId === 'S5' || stageId === 'END') {
       setView('assembly');
-      renderDialogue('Cô Hương', 'Cả nhóm đã đến điểm tập kết an toàn trên đỉnh đồi. Các em tiếp tục ở cùng cô nhé!');
+      renderDialogue('Cô Hương', 'Cả nhóm đã đến điểm tập kết an toàn trên đỉnh đồi. Các em tiếp tục ở cùng cô nhé!', 'teacher', 'encouraging');
       renderChoices([
         { id: 'open_recap', label: 'Ôn tập kiến thức & Xem thành tích ⭐' }
       ]);
