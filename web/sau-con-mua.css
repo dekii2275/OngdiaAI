@@ -652,3 +652,118 @@ body {
   to { transform: translateY(-8px); }
 }
 
+/* Educator Dashboard Modal */
+.educator-card {
+  max-width: 680px;
+  background: #FFF;
+  border-radius: 12px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.educator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #EAE5D8;
+  padding-bottom: 10px;
+}
+
+.educator-header h2 {
+  font-size: 20px;
+  color: #2A4A3A;
+  margin: 0;
+}
+
+.educator-badge {
+  background: #385E38;
+  color: #FFF;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.educator-sub {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.lo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.lo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F9F7F1;
+  border: 1px solid #E5E0D0;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.lo-status-icon {
+  font-size: 18px;
+  min-width: 24px;
+}
+
+.lo-text {
+  flex: 1;
+}
+
+.lo-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 2px 0;
+}
+
+.lo-details {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.educator-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: #F0EDE4;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #777;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.educator-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+

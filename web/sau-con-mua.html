@@ -156,8 +156,42 @@
           <p class="final-reminder">"Thấy điều bất thường: báo người lớn, tránh xa chỗ nghi ngờ, làm theo hướng dẫn."</p>
           <div class="footer-buttons">
             <button id="btn-replay" class="choice-btn">Chơi Lại Phân Đoạn</button>
+            <button id="btn-open-educator" class="choice-btn" style="background:#385E38;">Bảng Đánh Giá Sư Phạm 📊</button>
             <a href="index.html" class="choice-btn secondary-btn">Về Trang Chủ</a>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Bảng Đánh Giá Sư Phạm Dành Cho Giáo Viên -->
+    <div id="educator-modal" class="modal-overlay hidden">
+      <div class="modal-card educator-card">
+        <div class="educator-header">
+          <h2>📊 Báo Cáo Sư Phạm & Năng Lực Sơ Tán</h2>
+          <span class="educator-badge" id="educator-score-badge">8/8 Điểm</span>
+        </div>
+        <p class="educator-sub">Phân tích hành vi & mức độ độc lập theo 4 mục tiêu học tập (LO1–LO4)</p>
+        
+        <div class="lo-list" id="lo-list-container"></div>
+
+        <div class="educator-metrics" id="educator-metrics">
+          <div class="metric-item">
+            <span class="metric-label">Thời gian hoàn thành:</span>
+            <span class="metric-value" id="metric-duration">--</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Lần gợi ý sư phạm:</span>
+            <span class="metric-value" id="metric-hints">0</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Trạng thái:</span>
+            <span class="metric-value" id="metric-status">Hoàn thành</span>
+          </div>
+        </div>
+
+        <div class="educator-actions">
+          <button id="btn-export-telemetry" class="choice-btn" style="background:#557EAD;">📥 Xuất Dữ Liệu JSON (LMS)</button>
+          <button id="btn-close-educator" class="choice-btn secondary-btn">Đóng</button>
         </div>
       </div>
     </div>

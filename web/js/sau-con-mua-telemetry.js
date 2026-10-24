@@ -6,6 +6,7 @@
     root.SauConMuaTelemetry = exports;
     root.TelemetryLogger = exports.TelemetryLogger;
     root.evaluateRubric = exports.evaluateRubric;
+    root.generateEducatorReport = exports.generateEducatorReport;
   }
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
@@ -96,8 +97,78 @@
     };
   }
 
+  function generateEducatorReport(events) {
+    const evts = Array.isArray(events) ? events : [];
+    const rubric = evaluateRubric(evts);
+
+    let minElapsed = Infinity;
+    let maxElapsed = 0;
+    evts.forEach(e => {
+      const ms = Number(e.elapsed_ms || 0);
+      if (ms < minElapsed) minElapsed = ms;
+      if (ms > maxElapsed) maxElapsed = ms;
+    });
+    const totalDurationMs = maxElapsed >= minElapsed ? (maxElapsed - minElapsed) : 0;
+
+    const hadApproachAttempt = evts.some(e => {
+      const c = (e.payload && e.payload.choice_id) || e.choice_id;
+      return c === 'approach_cue';
+    });
+
+    const hadReturnAttempt = evts.some(e => {
+      const c = (e.payload && e.payload.choice_id) || e.choice_id;
+      return c === 'return_for_drawing';
+    });
+
+    const hadShortcutAttempt = evts.some(e => {
+      const c = (e.payload && e.payload.choice_id) || e.choice_id;
+      return c === 'closed_shortcut';
+    });
+
+    const hintsCount = evts.filter(e => e.type === 'hint_shown').length;
+
+    const objectives = {
+      LO1: {
+        id: 'LO1',
+        title: 'Báo người lớn khi thấy bất thường',
+        achieved: rubric.scores.D1 >= 1 && rubric.scores.D2 >= 1,
+        details: `Điểm D1: ${rubric.scores.D1}/2, Điểm D2: ${rubric.scores.D2}/2`
+      },
+      LO2: {
+        id: 'LO2',
+        title: 'Tránh tiến gần vùng nghi ngờ sạt lở',
+        achieved: !hadApproachAttempt,
+        details: hadApproachAttempt ? 'Có tò mò muốn lại gần, đã được cô giải thích ngăn lại' : 'Tuyệt đối giữ khoảng cách an toàn ngay từ đầu'
+      },
+      LO3: {
+        id: 'LO3',
+        title: 'Ưu tiên an toàn hơn việc lấy đồ bỏ quên',
+        achieved: rubric.scores.D3 >= 1 && !hadReturnAttempt,
+        details: `Điểm D3: ${rubric.scores.D3}/2`
+      },
+      LO4: {
+        id: 'LO4',
+        title: 'Tuân thủ di chuyển theo tuyến được hướng dẫn',
+        achieved: rubric.scores.D4 >= 1 && !hadShortcutAttempt,
+        details: `Điểm D4: ${rubric.scores.D4}/2`
+      }
+    };
+
+    return {
+      sessionId: (evts[0] && evts[0].session_id) || 'session-default',
+      status: rubric.status,
+      summaryScore: `${rubric.totalScore}/8`,
+      totalDurationMs,
+      hintsCount,
+      rubricScores: rubric.scores,
+      objectives,
+      eventLog: evts
+    };
+  }
+
   return {
     TelemetryLogger,
-    evaluateRubric
+    evaluateRubric,
+    generateEducatorReport
   };
 }));

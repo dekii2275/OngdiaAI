@@ -74,6 +74,17 @@
     els.cueDesc = document.getElementById('cue-zoom-desc');
     els.btnCloseCue = document.getElementById('btn-close-cue');
 
+    // Educator Dashboard
+    els.btnOpenEducator = document.getElementById('btn-open-educator');
+    els.educatorModal = document.getElementById('educator-modal');
+    els.educatorScoreBadge = document.getElementById('educator-score-badge');
+    els.loListContainer = document.getElementById('lo-list-container');
+    els.metricDuration = document.getElementById('metric-duration');
+    els.metricHints = document.getElementById('metric-hints');
+    els.metricStatus = document.getElementById('metric-status');
+    els.btnExportTelemetry = document.getElementById('btn-export-telemetry');
+    els.btnCloseEducator = document.getElementById('btn-close-educator');
+
     els.hotspotCrack = document.getElementById('hotspot-crack');
     els.hotspotTree = document.getElementById('hotspot-tree');
     els.hotspotStream = document.getElementById('hotspot-stream');
@@ -549,6 +560,67 @@
         renderCurrentState();
       };
     }
+
+    if (els.btnOpenEducator) {
+      els.btnOpenEducator.onclick = () => {
+        playClickSound();
+        openEducatorDashboard();
+      };
+    }
+  }
+
+  function openEducatorDashboard() {
+    if (!els.educatorModal) return;
+    const events = telemetry ? telemetry.getEvents() : [];
+    const report = window.generateEducatorReport 
+      ? window.generateEducatorReport(events) 
+      : { summaryScore: '8/8', totalDurationMs: 0, hintsCount: 0, status: 'completed', objectives: {} };
+
+    if (els.educatorScoreBadge) els.educatorScoreBadge.textContent = report.summaryScore;
+    if (els.metricDuration) els.metricDuration.textContent = Math.round(report.totalDurationMs / 1000) + ' giây';
+    if (els.metricHints) els.metricHints.textContent = report.hintsCount;
+    if (els.metricStatus) els.metricStatus.textContent = report.status === 'completed' ? 'Hoàn thành' : 'Chưa xong';
+
+    if (els.loListContainer) {
+      els.loListContainer.innerHTML = '';
+      Object.values(report.objectives || {}).forEach(obj => {
+        const item = document.createElement('div');
+        item.className = 'lo-item';
+        item.innerHTML = `
+          <span class="lo-status-icon">${obj.achieved ? '✅' : '⚠️'}</span>
+          <div class="lo-text">
+            <p class="lo-title">${obj.title}</p>
+            <p class="lo-details">${obj.details}</p>
+          </div>
+        `;
+        els.loListContainer.appendChild(item);
+      });
+    }
+
+    if (els.btnExportTelemetry) {
+      els.btnExportTelemetry.onclick = () => {
+        playClickSound();
+        const jsonStr = JSON.stringify(report, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `telemetry-report-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+    }
+
+    if (els.btnCloseEducator) {
+      els.btnCloseEducator.onclick = () => {
+        playClickSound();
+        els.educatorModal.classList.add('hidden');
+      };
+    }
+
+    els.educatorModal.classList.remove('hidden');
   }
 
   // Open Cue Zoom Modal

@@ -31,16 +31,21 @@ Trò chơi sử dụng mô hình ngôn ngữ lớn (Gemini) để phân loại �
    - Phản hồi từ AI được ánh xạ nghiêm ngặt vào whitelist 5 câu thoại duyệt sẵn của NPC Minh (`minh_accept`, `minh_regret`, `minh_worried`, `minh_ask_teacher`, `minh_redirect`).
    - Thời gian chờ tối đa 3000ms. Nếu mạng mất kết nối, quá thời gian hoặc API lỗi, hệ thống tự động fallback về `minh_accept` an toàn. Game không bao giờ bị nghẽn (zero softlock).
 
-### 3. Quy Tắc Sư Phạm & Thiết Kế Thân Thiện Trẻ Em
+### 3. Quy Tắc Sư Phạm & Trải Nghiệm Tương Tác Nghe — Nhìn (Phase 2)
 - **Quy tắc hạt nhân:** *"Engine quyết định chân lý, hành động và đánh giá; AI chỉ tham gia vào việc hỗ trợ hội thoại."*
-- **Giao diện:** Canvas tỉ lệ chuẩn 16:9, nút bấm lớn tối thiểu `48x48px`, font chữ rõ ràng, có nút đọc lại lời thoại, nút trợ giúp cô giáo (`btn-teacher-help`), không có đồng hồ đếm ngược gây căng thẳng.
+- **12s Storyboard Cinematic Intro:** 3 shot keyframe với hiệu ứng Pan & Zoom, phụ đề tiếng Việt đồng bộ và nút "Bỏ qua".
+- **Chân dung biểu cảm động (9 Emotion Portraits):** Avatar trong hộp thoại thay đổi biểu cảm linh hoạt theo ngữ cảnh (an_neutral/worried/relieved, minh_neutral/worried/relieved, teacher_neutral/encouraging/serious).
+- **Hoạt cảnh di chuyển theo tuyến sơ tán (Route Walk Tween):** Mô phỏng trực quan đoàn học sinh và cô giáo di chuyển theo các mốc Tuyến A trên sườn đồi, rào chắn cảnh báo đỏ khi chọn đường tắt nguy hiểm.
+- **Giọng đọc tiếng Việt (Speech Synthesis):** Hỗ trợ trợ thính, đọc rõ ràng từng câu thoại khi bấm "Đọc lại" hoặc chuyển cảnh.
+- **Âm thanh mưa gió tổng hợp (Web Audio procedural):** Tiếng mưa rào tự nhiên không cần tải file ngoài nặng nề.
+- **Bảng Đánh Giá Sư Phạm Cho Giáo Viên & Xuất JSON (LMS):** Phân tích chi tiết 4 mục tiêu học tập (LO1–LO4), thời gian phản hồi, số lần hint, cho phép tải file báo cáo JSON.
 - **Hệ thống đánh giá Rubric (0–8 điểm):**
   - Độc lập (chọn đúng ở lần đầu, không cần trợ giúp): **2 điểm**.
   - Có hỗ trợ (sau gợi ý hoặc chọn lại): **1 điểm**.
   - 3 Thẻ thành tích định tính: **Báo người lớn** (D1), **Ưu tiên an toàn** (D3), **Đi cùng nhóm** (D4).
 
 ### 4. Chạy Toàn Bộ Bộ Kiểm Thử (Full Regression Test)
-Chạy tất cả 66 tests (bao gồm 25 tests cũ của Chương 1/2 và 41 tests mới của Sau Cơn Mưa):
+Chạy tất cả 78 tests (bao gồm 25 tests Chương 1/2 và 53 tests của Sau Cơn Mưa):
 ```powershell
 npm test
 ```
