@@ -1,0 +1,475 @@
+/* sau-con-mua.css — Phong cách Mỹ Thuật 2D Sách Tranh Dành Cho Trẻ Em */
+
+:root {
+  --color-cream: #F6F0DF;
+  --color-green: #648264;
+  --color-uniform-blue: #557EAD;
+  --color-soil-brown: #A7805A;
+  --color-cloud-gray: #B9C4CC;
+  --color-dark-text: #222B32;
+  --color-card-bg: rgba(255, 255, 255, 0.95);
+  --color-accent-gold: #E5A93C;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  background-color: #1a1e24;
+  color: var(--color-dark-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#game-app {
+  width: 100vw;
+  max-width: 1280px;
+  background: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Header */
+#top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #3B4D3C;
+  color: #fff;
+  z-index: 10;
+}
+
+.mission-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mission-info .badge {
+  background: var(--color-accent-gold);
+  color: #1a1e24;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.mission-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.help-btn {
+  background: #E06D53;
+  border-color: #C05038;
+}
+
+.help-btn:hover {
+  background: #C05038;
+}
+
+/* Main Viewport (16:9) */
+#stage-viewport {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#stage-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #2b3a4a;
+  overflow: hidden;
+}
+
+#background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center bottom;
+  transition: background-image 0.5s ease;
+}
+
+#characters-layer, #hotspots-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Character Sprites */
+.character-sprite {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  width: 18%;
+  max-width: 170px;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+}
+
+.character-sprite img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+}
+
+/* Hotspots */
+.cue-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--color-accent-gold);
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1e24;
+  animation: pulse-pin 2s infinite ease-in-out;
+  transition: transform 0.2s ease;
+}
+
+.cue-hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+@keyframes pulse-pin {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Dialogue Box */
+#dialogue-box {
+  background: var(--color-cream);
+  border-top: 3px solid #648264;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.speaker-tag {
+  font-size: 15px;
+  font-weight: 700;
+  color: #385E38;
+}
+
+.speech-bubble {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-dark-text);
+}
+
+/* Choices Panel */
+.choices-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  padding: 12px 24px 20px;
+  background: var(--color-cream);
+}
+
+.choice-btn {
+  min-height: 52px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: #557EAD;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.choice-btn:hover {
+  background: #3B6491;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.choice-btn:active {
+  transform: translateY(0);
+}
+
+.choice-btn.secondary-btn {
+  background: #8898A6;
+}
+
+.choice-btn.secondary-btn:hover {
+  background: #6C7D8C;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(3px);
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-card h3 {
+  font-size: 20px;
+  color: #222;
+}
+
+.modal-hint {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Picture Grid in S2_HELP */
+.pictures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.picture-card {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fdfdfd;
+  display: flex;
+  flex-direction: column;
+}
+
+.picture-card:hover {
+  border-color: #557EAD;
+  transform: scale(1.03);
+}
+
+.picture-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.picture-card span {
+  padding: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Chat Modal */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chat-avatar {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.chat-sub {
+  font-size: 13px;
+  color: #666;
+}
+
+.chat-log {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fafafa;
+}
+
+.chat-bubble {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  max-width: 80%;
+}
+
+.chat-bubble.player {
+  background: #557EAD;
+  color: #fff;
+  align-self: flex-end;
+}
+
+.chat-bubble.npc {
+  background: #EAECEF;
+  color: #222;
+  align-self: flex-start;
+}
+
+.chat-input-bar {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input-bar input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.send-btn {
+  padding: 10px 20px;
+  background: #648264;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Recap Modal */
+.recap-card {
+  max-width: 720px;
+}
+
+.recap-title {
+  text-align: center;
+  color: #385E38;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.card-badge {
+  background: #F4F6F8;
+  border: 2px solid #557EAD;
+  border-radius: 10px;
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-icon {
+  font-size: 28px;
+}
+
+.badge-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #222B32;
+}
+
+.badge-desc {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.3;
+}
+
+.final-reminder {
+  font-style: italic;
+  font-weight: 600;
+  text-align: center;
+  color: #A7805A;
+  margin: 10px 0;
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Responsive for Mobile/Tablet */
+@media (max-width: 768px) {
+  .mission-title { font-size: 15px; }
+  .speech-bubble { font-size: 16px; }
+  .choices-panel { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .pictures-grid { grid-template-columns: 1fr; }
+}

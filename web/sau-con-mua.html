@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sau Cơn Mưa — Kỹ Năng Phòng Tránh Sạt Lở & Sơ Tán An Toàn</title>
+  <link rel="stylesheet" href="typography.css">
+  <link rel="stylesheet" href="sau-con-mua.css">
+</head>
+<body>
+  <div id="game-app">
+    <!-- Top Header -->
+    <header id="top-bar">
+      <div class="mission-info">
+        <span class="badge">Phân đoạn 01</span>
+        <h1 class="mission-title">Sau Cơn Mưa · Trường Tiểu Học Vùng Cao</h1>
+      </div>
+      <div class="header-controls">
+        <button id="btn-sound" class="control-btn" title="Bật/Tắt âm thanh">🔊 Âm thanh: Bật</button>
+        <button id="btn-repeat-speech" class="control-btn" title="Đọc lại lời thoại">🔁 Đọc lại</button>
+        <button id="btn-teacher-help" class="control-btn help-btn" title="Cô ơi giúp em">🙋 Cô ơi, giúp em!</button>
+      </div>
+    </header>
+
+    <!-- Main Stage Viewport (16:9) -->
+    <main id="stage-viewport">
+      <div id="stage-canvas">
+        <!-- Background Layer -->
+        <div id="background-layer"></div>
+
+        <!-- Hotspots Layer -->
+        <div id="hotspots-layer">
+          <div id="hotspot-crack" class="cue-hotspot" style="left: 77%; top: 43%;" title="Quan sát vết nứt đất">
+            <span class="hotspot-pin">🔍</span>
+            <span class="hotspot-label">Vết nứt đất</span>
+          </div>
+          <div id="hotspot-tree" class="cue-hotspot" style="left: 85%; top: 28%;" title="Quan sát cây nghiêng">
+            <span class="hotspot-pin">🔍</span>
+            <span class="hotspot-label">Cây nghiêng</span>
+          </div>
+          <div id="hotspot-stream" class="cue-hotspot" style="left: 90%; top: 58%;" title="Quan sát nước suối">
+            <span class="hotspot-pin">🔍</span>
+            <span class="hotspot-label">Nước suối đỏ đục</span>
+          </div>
+        </div>
+
+        <!-- Characters Layer -->
+        <div id="characters-layer">
+          <div id="char-an" class="character-sprite" style="left: 35%; top: 70%;" title="Bạn An">
+            <img src="assets/sau-con-mua/characters/an.png" alt="Bạn An">
+          </div>
+          <div id="char-minh" class="character-sprite" style="left: 46%; top: 70%;" title="Bạn Minh">
+            <img src="assets/sau-con-mua/characters/minh.png" alt="Bạn Minh">
+          </div>
+          <div id="char-teacher" class="character-sprite" style="left: 61%; top: 67%;" title="Cô Hương">
+            <img src="assets/sau-con-mua/characters/teacher.png" alt="Cô Hương">
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialogue Box -->
+      <section id="dialogue-box">
+        <div class="speaker-tag" id="speaker-name">Cô Hương</div>
+        <div class="speech-bubble" id="speech-text">Mưa đã kéo dài. Các em ở cùng cô nhé. Có điều gì làm em lo, hãy nói với cô!</div>
+      </section>
+
+      <!-- Choice Selection Container (Max 3 buttons) -->
+      <section id="choice-buttons" class="choices-panel">
+        <!-- Dynamic choice buttons inserted here -->
+      </section>
+    </main>
+
+    <!-- Modal: S2_HELP Chọn Hình Ảnh Gợi Ý -->
+    <div id="help-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h3>Em có thể chỉ vào hình điều em đã thấy</h3>
+        <p class="modal-hint">Nếu chưa biết cách nói, em cứ chọn hình hoặc nói với cô nhé!</p>
+        <div class="pictures-grid" id="help-pictures"></div>
+        <button id="btn-help-unsure" class="choice-btn secondary-btn">Em không biết / Tiếp tục đi cùng cô</button>
+      </div>
+    </div>
+
+    <!-- Modal: Trò chuyện với Minh (D3) -->
+    <div id="minh-chat-modal" class="modal-overlay hidden">
+      <div class="modal-card chat-card">
+        <div class="chat-header">
+          <img src="assets/sau-con-mua/characters/minh.png" alt="Minh" class="chat-avatar">
+          <div>
+            <h3>Nói chuyện cùng bạn Minh</h3>
+            <p class="chat-sub">Minh đang tiếc bức tranh để quên. Em hãy động viên bạn nhé (tối đa 2 câu).</p>
+          </div>
+        </div>
+        <div id="minh-chat-log" class="chat-log"></div>
+        <div class="chat-input-bar">
+          <input type="text" id="minh-input" maxlength="160" placeholder="Viết vài lời nhắn gửi bạn Minh (ví dụ: Đi cùng cô trước đã nhé)...">
+          <button id="btn-send-minh" class="send-btn">Gửi</button>
+        </div>
+        <div class="chat-footer">
+          <button id="btn-skip-chat" class="choice-btn">Đi cùng cô ngay</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen: S5 Ôn Tập & 3 Thẻ Thành Tích -->
+    <div id="recap-container" class="modal-overlay hidden">
+      <div class="modal-card recap-card">
+        <h2 class="recap-title">Tổng Kết & Ôn Tập Kỹ Năng Sơ Tán</h2>
+        <div id="recap-quiz" class="recap-quiz-box"></div>
+        <div id="cards-result" class="cards-grid hidden">
+          <div class="card-badge" id="card-report">
+            <div class="badge-icon">📢</div>
+            <div class="badge-title">Báo người lớn</div>
+            <div class="badge-desc">Em đã biết báo cô ngay khi thấy điều bất thường ngoài hàng rào.</div>
+          </div>
+          <div class="card-badge" id="card-safety">
+            <div class="badge-icon">🛡️</div>
+            <div class="badge-title">Ưu tiên an toàn</div>
+            <div class="badge-desc">Em đã ưu tiên đi cùng cô thay vì quay lại lấy đồ để quên.</div>
+          </div>
+          <div class="card-badge" id="card-group">
+            <div class="badge-icon">🤝</div>
+            <div class="badge-title">Đi cùng nhóm</div>
+            <div class="badge-desc">Em đã tuân thủ đi theo tuyến đường cô giáo hướng dẫn.</div>
+          </div>
+        </div>
+        <div class="recap-footer hidden" id="recap-footer">
+          <p class="final-reminder">"Thấy điều bất thường: báo người lớn, tránh xa chỗ nghi ngờ, làm theo hướng dẫn."</p>
+          <div class="footer-buttons">
+            <button id="btn-replay" class="choice-btn">Chơi Lại Phân Đoạn</button>
+            <a href="index.html" class="choice-btn secondary-btn">Về Trang Chủ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Zoom Cue Image -->
+    <div id="cue-zoom-modal" class="modal-overlay hidden">
+      <div class="modal-card cue-zoom-card">
+        <h3 id="cue-zoom-title">Chi tiết quan sát</h3>
+        <img id="cue-zoom-img" src="" alt="Cue">
+        <p id="cue-zoom-desc"></p>
+        <button id="btn-close-cue" class="choice-btn">Đã Quan Sát Xong</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/sau-con-mua-loader.js"></script>
+  <script src="js/sau-con-mua-engine.js"></script>
+  <script src="js/sau-con-mua-telemetry.js"></script>
+  <script src="js/sau-con-mua-ui.js"></script>
+</body>
+</html>
