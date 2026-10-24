@@ -35,6 +35,11 @@
     els.btnRepeat = document.getElementById('btn-repeat-speech');
     els.btnHelp = document.getElementById('btn-teacher-help');
 
+    // Route Layer (S4)
+    els.routeLayer = document.getElementById('route-layer');
+    els.routeCanvas = document.getElementById('route-canvas');
+    els.roadblockMarker = document.getElementById('roadblock-marker');
+
     // Cinematic Intro
     els.cinematicIntro = document.getElementById('cinematic-intro');
     els.introCaption = document.getElementById('intro-caption');
@@ -136,6 +141,76 @@
     }, 20000);
   }
 
+  const routeAnchors = [
+    [0.25, 0.68],
+    [0.48, 0.68],
+    [0.68, 0.61],
+    [0.83, 0.55]
+  ];
+
+  function drawRoutePath(anchors) {
+    if (!els.routeCanvas) return;
+    const ctx = els.routeCanvas.getContext('2d');
+    if (!ctx) return;
+    const w = els.routeCanvas.width;
+    const h = els.routeCanvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const pts = (anchors || routeAnchors).map(([x, y]) => ({ x: x * w, y: y * h }));
+    if (pts.length < 2) return;
+
+    // Draw dashed guidance path
+    ctx.beginPath();
+    ctx.setLineDash([14, 10]);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = '#648264';
+    ctx.lineCap = 'round';
+    ctx.shadowColor = '#A8D5BA';
+    ctx.shadowBlur = 10;
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineTo(pts[i].x, pts[i].y);
+    }
+    ctx.stroke();
+
+    // Draw waypoints
+    pts.forEach((pt, idx) => {
+      ctx.beginPath();
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+      ctx.arc(pt.x, pt.y, idx === pts.length - 1 ? 14 : 9, 0, Math.PI * 2);
+      ctx.fillStyle = idx === pts.length - 1 ? '#F6F0DF' : '#557EAD';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#2A4A3A';
+      ctx.stroke();
+    });
+  }
+
+  function animatePartyRoute(anchors, onFinish) {
+    const chars = [els.charAn, els.charMinh, els.charTeacher].filter(Boolean);
+    chars.forEach(c => c.classList.add('party-walking'));
+
+    const pts = anchors || routeAnchors;
+    let step = 0;
+    const totalSteps = pts.length;
+
+    const interval = setInterval(() => {
+      step++;
+      if (step >= totalSteps) {
+        clearInterval(interval);
+        chars.forEach(c => c.classList.remove('party-walking'));
+        if (onFinish) onFinish();
+        return;
+      }
+
+      const [nx, ny] = pts[step];
+      if (els.charAn) { els.charAn.style.left = (nx * 100) + '%'; els.charAn.style.top = (ny * 100) + '%'; }
+      if (els.charMinh) { els.charMinh.style.left = ((nx - 0.08) * 100) + '%'; els.charMinh.style.top = (ny * 100) + '%'; }
+      if (els.charTeacher) { els.charTeacher.style.left = ((nx + 0.08) * 100) + '%'; els.charTeacher.style.top = ((ny - 0.02) * 100) + '%'; }
+    }, 350);
+  }
+
   // Update View & Character Positions
   function setView(viewName) {
     if (!els.bgLayer) return;
@@ -143,18 +218,26 @@
     if (viewName === 'school') {
       els.bgLayer.style.backgroundImage = "url('assets/sau-con-mua/backgrounds/bg_school.webp')";
       if (els.hotspotsLayer) els.hotspotsLayer.style.display = 'block';
+      if (els.routeLayer) els.routeLayer.classList.add('hidden');
+      if (els.roadblockMarker) els.roadblockMarker.classList.add('hidden');
       if (els.charAn) { els.charAn.style.left = '35%'; els.charAn.style.top = '70%'; }
       if (els.charMinh) { els.charMinh.style.left = '46%'; els.charMinh.style.top = '70%'; }
       if (els.charTeacher) { els.charTeacher.style.left = '61%'; els.charTeacher.style.top = '67%'; }
     } else if (viewName === 'route') {
       els.bgLayer.style.backgroundImage = "url('assets/sau-con-mua/backgrounds/bg_route.webp')";
       if (els.hotspotsLayer) els.hotspotsLayer.style.display = 'none';
+      if (els.routeLayer) {
+        els.routeLayer.classList.remove('hidden');
+        drawRoutePath(routeAnchors);
+      }
       if (els.charAn) { els.charAn.style.left = '25%'; els.charAn.style.top = '68%'; }
       if (els.charMinh) { els.charMinh.style.left = '35%'; els.charMinh.style.top = '68%'; }
       if (els.charTeacher) { els.charTeacher.style.left = '48%'; els.charTeacher.style.top = '68%'; }
     } else if (viewName === 'assembly') {
       els.bgLayer.style.backgroundImage = "url('assets/sau-con-mua/backgrounds/bg_assembly.webp')";
       if (els.hotspotsLayer) els.hotspotsLayer.style.display = 'none';
+      if (els.routeLayer) els.routeLayer.classList.add('hidden');
+      if (els.roadblockMarker) els.roadblockMarker.classList.add('hidden');
       if (els.charAn) { els.charAn.style.left = '40%'; els.charAn.style.top = '72%'; }
       if (els.charMinh) { els.charMinh.style.left = '47%'; els.charMinh.style.top = '72%'; }
       if (els.charTeacher) { els.charTeacher.style.left = '55%'; els.charTeacher.style.top = '66%'; }
@@ -215,6 +298,25 @@
 
     if (choice.id === 'open_minh_chat') {
       openMinhChatModal();
+      return;
+    }
+
+    if (choice.id === 'guided_route') {
+      if (els.choiceButtons) {
+        els.choiceButtons.innerHTML = '<div class="choice-btn" style="background:#648264;cursor:default;">🚶 Cả nhóm đang di chuyển theo lối cô chỉ dẫn...</div>';
+      }
+      animatePartyRoute(routeAnchors, () => {
+        engine.dispatch({ type: 'CHOOSE', choice_id: 'guided_route' });
+        renderCurrentState();
+      });
+      return;
+    }
+
+    if (choice.id === 'closed_shortcut') {
+      if (els.roadblockMarker) els.roadblockMarker.classList.remove('hidden');
+      playAlertSound();
+      engine.dispatch({ type: 'CHOOSE', choice_id: 'closed_shortcut' });
+      renderDialogue('Cô Hương', 'Lối tắt ven sườn dốc đã bị đóng do nguy cơ sạt trượt đất! Các em theo lối cô hướng dẫn nhé.', 'teacher', 'serious');
       return;
     }
 
