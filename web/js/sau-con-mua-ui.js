@@ -34,6 +34,12 @@
     els.btnRepeat = document.getElementById('btn-repeat-speech');
     els.btnHelp = document.getElementById('btn-teacher-help');
 
+    // Cinematic Intro
+    els.cinematicIntro = document.getElementById('cinematic-intro');
+    els.introCaption = document.getElementById('intro-caption');
+    els.introProgressBar = document.getElementById('intro-progress-bar');
+    els.btnSkipIntro = document.getElementById('btn-skip-intro');
+
     // Modals
     els.helpModal = document.getElementById('help-modal');
     els.helpPictures = document.getElementById('help-pictures');
@@ -531,6 +537,74 @@
     }
   }
 
+  let introInterval = null;
+  let introTimer = null;
+
+  function playCinematicIntro(onComplete) {
+    if (!els.cinematicIntro) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    els.cinematicIntro.classList.remove('hidden');
+    const shots = [
+      document.getElementById('intro-shot-1'),
+      document.getElementById('intro-shot-2'),
+      document.getElementById('intro-shot-3')
+    ];
+    const captions = [
+      'Mưa đã kéo dài nhiều giờ...',
+      'Bạn An và bạn Minh đang chờ cùng cô Hương dưới mái hiên trường.',
+      'Hôm nay, cả lớp cùng cô tập cách quan sát và sơ tán an toàn nhé!'
+    ];
+
+    let currentShot = 0;
+    let elapsed = 0;
+    const totalDuration = 12000; // 12 seconds
+    const intervalMs = 100;
+
+    function showShot(idx) {
+      shots.forEach((s, i) => {
+        if (s) {
+          if (i === idx) s.classList.add('shot-active');
+          else s.classList.remove('shot-active');
+        }
+      });
+      if (els.introCaption) els.introCaption.textContent = captions[idx] || captions[0];
+    }
+
+    showShot(0);
+
+    const finishIntro = () => {
+      clearInterval(introInterval);
+      clearTimeout(introTimer);
+      if (els.cinematicIntro) els.cinematicIntro.classList.add('hidden');
+      if (onComplete) onComplete();
+    };
+
+    if (els.btnSkipIntro) {
+      els.btnSkipIntro.onclick = () => {
+        playClickSound();
+        finishIntro();
+      };
+    }
+
+    introInterval = setInterval(() => {
+      elapsed += intervalMs;
+      if (els.introProgressBar) {
+        els.introProgressBar.style.width = Math.min(100, (elapsed / totalDuration) * 100) + '%';
+      }
+      const newShot = Math.min(2, Math.floor((elapsed / totalDuration) * 3));
+      if (newShot !== currentShot) {
+        currentShot = newShot;
+        showShot(currentShot);
+      }
+      if (elapsed >= totalDuration) {
+        finishIntro();
+      }
+    }, intervalMs);
+  }
+
   // Render the current state based on Engine
   function renderCurrentState() {
     resetIdleTimer();
@@ -549,11 +623,21 @@
       setView('school');
       renderDialogue('Giới thiệu', 'Mưa lớn đã kéo dài nhiều giờ. Bạn An và bạn Minh đang đứng đợi cùng cô giáo Hương.');
       renderChoices([
+        { id: 'play_intro', label: '🎬 Xem giới thiệu (12s)' },
         { id: 'start_game', label: 'Bắt đầu câu chuyện →' }
       ]);
-      const btn = els.choiceButtons.querySelector('.choice-btn');
-      if (btn) {
-        btn.onclick = () => {
+      const btns = els.choiceButtons.querySelectorAll('.choice-btn');
+      if (btns[0]) {
+        btns[0].onclick = () => {
+          playClickSound();
+          playCinematicIntro(() => {
+            engine.dispatch({ type: 'START' });
+            renderCurrentState();
+          });
+        };
+      }
+      if (btns[1]) {
+        btns[1].onclick = () => {
           playClickSound();
           engine.dispatch({ type: 'START' });
           renderCurrentState();

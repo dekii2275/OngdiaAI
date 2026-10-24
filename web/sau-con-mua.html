@@ -24,6 +24,22 @@
 
     <!-- Main Stage Viewport (16:9) -->
     <main id="stage-viewport">
+      <!-- Cinematic Storyboard Intro (S0) -->
+      <div id="cinematic-intro" class="cinematic-overlay hidden">
+        <div class="intro-viewport">
+          <div id="intro-shot-1" class="intro-shot shot-active" style="background-image: url('assets/sau-con-mua/intro/intro_1.webp');"></div>
+          <div id="intro-shot-2" class="intro-shot" style="background-image: url('assets/sau-con-mua/intro/intro_2.webp');"></div>
+          <div id="intro-shot-3" class="intro-shot" style="background-image: url('assets/sau-con-mua/intro/intro_3.webp');"></div>
+        </div>
+        <div class="intro-timeline">
+          <div id="intro-progress-bar" class="intro-progress-fill"></div>
+        </div>
+        <div class="intro-bottom-bar">
+          <div id="intro-caption" class="intro-caption-text">Mưa đã kéo dài.</div>
+          <button id="btn-skip-intro" class="choice-btn skip-intro-btn">Bỏ qua intro ⏭</button>
+        </div>
+      </div>
+
       <div id="stage-canvas">
         <!-- Background Layer -->
         <div id="background-layer"></div>
