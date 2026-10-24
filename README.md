@@ -1,5 +1,7 @@
 # Game giải đố cốt truyện 2D
 
+**Cô Thảo AI:** Cả hai chương có nút **Hỏi cô Thảo** để chat về bão lũ và sơ tán bằng `gemma-4-26b-a4b-it`. Chạy qua `npm start` với Node.js 22+ và cấu hình `.env` phía máy chủ. Xem [prompt, sáu few-shot và hợp đồng JSON](Docs/Thao-LLM.md).
+
 **Chương 01 → 02 đã nối thành một hành trình.** Chơi từ `http://localhost:4173`; ở cuối Chương 01 chọn **Ra cổng trường · Chương 02**. Game giữ lựa chọn về gấu bông, điều đã quan sát và cài đặt; trên trang đầu có nút tiếp tục đúng hành trình đang chơi. Xem [hướng dẫn hành trình](Docs/Journey-implementation.md).
 
 ## Chơi Scene 1 ngay, không cần Unity

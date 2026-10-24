@@ -426,7 +426,7 @@
     document.documentElement.dataset.characters = 'ready';
     render();
   }
-  function canMove() { return active && !modal && !state.dialogue && ['explore', 'puzzle', 'hallway'].includes(state.phase); }
+  function canMove() { return !window.ThaoAdvisor?.isOpen() && active && !modal && !state.dialogue && ['explore', 'puzzle', 'hallway'].includes(state.phase); }
   function nearestSpot() {
     const candidates = currentSpots().filter(spot => !['back', 'east'].includes(spot.id) && (state.phase !== 'explore' || spot.id === 'duyen'));
     const byDistance = candidates.map(spot => ({ spot, distance: Math.hypot(state.player.x - spot.floor, state.player.y - spot.floorY) })).sort((a, b) => a.distance - b.distance);
@@ -513,6 +513,7 @@
     requestAnimationFrame(animate);
   }
   function keydown(event) {
+    if (window.ThaoAdvisor?.isOpen()) return;
     if (event.ctrlKey || event.metaKey || event.altKey) return;
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
     if (modal) {
@@ -579,5 +580,6 @@
   window.addEventListener('pageshow',updateJourneyTitle);
   saved = readSave(); if(saved)state.settings={...saved.settings}; $('continue').hidden = !saved;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) state.settings.reducedMotion = true;
+  window.ThaoAdvisor?.init({ pause() { held.clear(); stopWalking(); }, context: () => ({ chapter: 'chapter01', location: state.location, objective: $('objective')?.textContent || state.phase }) });
   render(); loadAssets(); resizeRain(); requestAnimationFrame(animate);
 })();

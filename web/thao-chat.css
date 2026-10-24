@@ -1,0 +1,27 @@
+.thao-launch { white-space: nowrap; border: 1px solid #99b9a9; border-radius: 7px; padding: 9px 12px; color: #eff6ec; background: #254b40; font: inherit; cursor: pointer; }
+#thao-chat { box-sizing: border-box; width: min(620px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 22px; border: 1px solid #8c9d88; border-radius: 16px; background: #f6f3e9; color: #243b35; font: 14px/1.65 'Be Vietnam Pro', sans-serif; box-shadow: 0 20px 80px #0007; }
+#thao-chat::backdrop { background: #061714bd; }
+#thao-chat .thao-heading { display: flex; align-items: center; gap: 12px; padding: 0 0 12px; background: transparent; color: #243b35; border-bottom: 1px solid #ccd3c7; height: auto; }
+#thao-chat .thao-heading img { width: 56px; height: 62px; object-fit: contain; }
+#thao-chat h2 { font: 600 25px/1.3 'Lora', serif; margin: 3px 0; color: inherit; }
+#thao-chat small { font-size: 10px; letter-spacing: .06em; color: #53655b; }
+#thao-chat button { font: inherit; border: 1px solid #a4b2a1; border-radius: 7px; background: #e4eadf; color: #243b35; padding: 7px 10px; cursor: pointer; }
+#thao-chat .thao-close { margin-left: auto; font-size: 24px; }
+#thao-chat .thao-note { font-size: 12px; margin: 12px 0; color: #53655b; }
+#thao-chat .thao-messages { height: min(34dvh, 340px); min-height: 130px; overflow-y: auto; overscroll-behavior: contain; padding-right: 5px; }
+#thao-chat .thao-message { background: #e5ebdf; border-radius: 10px; padding: 12px 15px; margin: 8px 0; overflow-wrap: anywhere; }
+#thao-chat .thao-user { margin-left: 28px; background: #f0e4cd; }
+#thao-chat .thao-message[data-urgency=emergency] { border-left: 4px solid #a84e2e; }
+#thao-chat p { margin: 6px 0; }
+#thao-chat h3 { font: 600 13px/1.5 'Be Vietnam Pro', sans-serif; margin: 9px 0 3px; color: inherit; }
+#thao-chat ul, #thao-chat ol { padding-left: 22px; margin: 3px 0; }
+#thao-chat .thao-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+#thao-chat .thao-suggestions button { font-size: 11px; }
+#thao-chat label { display: block; font-weight: 600; margin-bottom: 5px; }
+#thao-chat textarea { box-sizing: border-box; display: block; width: 100%; resize: vertical; padding: 10px; border: 1px solid #899f90; border-radius: 8px; background: #fffdf7; color: #243b35; font: inherit; }
+#thao-chat .thao-form > div { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-top: 9px; }
+#thao-chat .thao-status { width: 100%; font-size: 12px; }
+#thao-chat button[type=submit] { background: #254b40; color: #fff; }
+#thao-chat :disabled { opacity: .6; cursor: wait; }
+#thao-chat :focus-visible { outline: 3px solid #b17d32; outline-offset: 2px; }
+@media (max-width: 600px) { #thao-chat { padding: 14px; } .thao-launch { font-size: 11px; padding: 8px; } }
