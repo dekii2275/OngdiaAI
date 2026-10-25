@@ -16,6 +16,7 @@
   <script defer src="js/story.js"></script>
   <script defer src="js/audio.js"></script>
   <script defer src="js/characters.js"></script>
+  <script defer src="js/voice-tts.js"></script>
   <script defer src="js/evacuation-map.js"></script>
   <script defer src="js/game.js"></script>
 </head>
@@ -25,6 +26,7 @@
       <div class="brand"><span class="brand-mark">雨</span><div><span class="eyebrow">MỘT CÂU CHUYỆN TRONG LÀNG</span><span class="brand-title">Cơn Mưa Lớn</span></div></div>
       <div class="chapter-label">CHƯƠNG 01 <span> / </span> LỚP 4B</div>
       <div class="tools">
+        <button id="voice-toggle" class="icon-button" aria-label="Bật/Tắt giọng đọc AI" title="Giọng đọc">🗣</button>
         <button id="sound" class="icon-button" aria-label="Bật âm thanh" title="Âm thanh">♪</button>
         <button id="settings" class="icon-button" aria-label="Cài đặt và hướng dẫn" title="Cài đặt">⚙</button>
       </div>
@@ -69,6 +71,7 @@
         <button id="next" class="next-button" aria-label="Tiếp tục hội thoại">Tiếp tục <span>↵</span></button>
       </section>
       <div id="overlay" class="overlay" hidden><section id="panel" class="panel" role="dialog" aria-modal="true" aria-label="Tương tác"></section></div>
+      <div id="ch1-debrief-modal" class="debrief-modal" hidden></div>
       <div id="toast" class="toast" role="status" hidden></div>
       <div class="vignette" aria-hidden="true"></div>
     </section>

@@ -45,6 +45,20 @@ window.SceneStory = (() => {
     'hallway-start': [N('Cửa lớp mở ra. Âm thanh mưa rõ hơn. Những lớp khác đang đi theo giáo viên.'), T('Hai em. Đi sát cô.'), B('Dạ.'), D('Dạ.'), N('Đi theo cô Thảo tới ngã rẽ. Bấm vào cô hoặc di chuyển đến gần rồi nhấn E. Không tách nhóm, không quay lại lớp.')],
     'walking-bear': [D('Lúc nãy tớ chỉ nghĩ tới Gấu thôi.'), B('Cậu lo cho nó mà.'), D('Ừ. Nhưng lần sau nếu cô bảo đi ngay... tớ sẽ đi ngay.'), B('Ừ.')],
     'walking-no-bear': [D('Tớ vẫn lo cho Gấu.'), B('Nó đang ở trong tủ. Khi an toàn mình sẽ hỏi cô.'), D('Ừ. Ít nhất mình đang đi cùng nhau.'), B('Ừ.')],
-    fork: [N('Ba người tới cuối hành lang. Lối phía đông có nước chảy qua và dây cảnh báo. Cổng phụ dẫn ra đường làng.'), D('Đây là đường trên sơ đồ...'), B('Nhưng bác Mạnh vừa bảo không đi.'), T('Đúng. Đây là lúc chúng ta phải chọn đường an toàn.'), R('Mạnh', 'Cô Thảo.'), T('Tôi nghe.'), R('Mạnh', 'Ra cổng phụ rồi khảo sát các tuyến đường làng. Tôi đang kiểm tra cầu phía Bắc.'), N('Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.')]
+    fork: [N('Ba người tới cuối hành lang. Lối phía đông có nước chảy qua và dây cảnh báo. Cổng phụ dẫn ra đường làng.'), D('Đây là đường trên sơ đồ...'), B('Nhưng bác Mạnh vừa bảo không đi.'), T('Đúng. Đây là lúc chúng ta phải chọn đường an toàn.'), R('Mạnh', 'Cô Thảo.'), T('Tôi nghe.'), R('Mạnh', 'Ra cổng phụ rồi khảo sát các tuyến đường làng. Tôi đang kiểm tra cầu phía Bắc.'), N('Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.')],
+    'ai-duyen-comfort': [
+      D('Tớ... tớ cuống quá, quên mật mã rồi! Đó là con gấu bông kỷ niệm sinh nhật bố tặng tớ...'),
+      B('Duyên, bình tĩnh nào. Tính mạng và sự an toàn của cậu mới là quan trọng nhất.'),
+      B('Gấu ở trong tủ an toàn, người lớn sẽ quay lại lấy sau. Nếu tìm manh mối nhanh trên tường được thì thử một lần, còn không mình đi cùng cô ngay nhé.'),
+      D('Cậu nói phải... Tớ bớt hoảng sợ rồi. Mình bình tĩnh quan sát xung quanh nào!')
+    ],
+    'ai-thao-safety': [
+      B('Thưa cô, nếu mình chỉ nán lại 30 giây để lấy món đồ rất quý giá thì có nên không ạ?'),
+      T('Trong lũ quét, 30 giây chính là ranh giới sống chết. Nước lũ có thể ập đến chỉ trong tích tắc.'),
+      T('Mọi tài sản hay đồ đạc đều có thể làm lại được, nhưng tính mạng con người là thứ duy nhất không thể làm lại.'),
+      T('Vì vậy, nguyên tắc bất di bất dịch khi có báo động là bỏ lại đồ đạc và sơ tán ngay lập tức.'),
+      D('Dạ cô, chúng em ghi nhớ rồi ạ!'),
+      B('Dạ, chúng em tuyệt đối không quay lại lấy đồ.')
+    ]
   };
 })();

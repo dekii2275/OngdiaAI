@@ -86,6 +86,9 @@
     if (line.location) dispatch({ type: 'LOCATION', location: line.location }, false);
     if (line.sfx) sound.play(line.sfx);
     if (line.flash && !state.settings.reducedMotion) { $('lightning').classList.remove('flash'); void $('lightning').offsetWidth; $('lightning').classList.add('flash'); }
+    if (window.VoiceTTS?.isEnabled?.()) {
+      window.VoiceTTS.speak(line.speaker, line.text);
+    }
     render();
   }
   function currentLine() { return state.dialogue ? Story[state.dialogue.id]?.[state.dialogue.index] : null; }
@@ -110,6 +113,8 @@
       case 'teacher-success': case 'teacher-leave': setDialogue('teacher-rules'); break;
       case 'teacher-rules': dispatch({ type: 'PHASE', phase: 'rules' }); showRules(); break;
       case 'radio': dispatch({ type: 'HALLWAY' }, false); playLine(); break;
+      case 'ai-duyen-comfort': dispatch({ type: 'PHASE', phase: 'puzzle' }); showLock(); break;
+      case 'ai-thao-safety': dispatch({ type: 'PHASE', phase: 'rules' }); showRules(); break;
       case 'fork': dispatch({ type: 'COMPLETE' }); showResults(); break;
       default: render();
     }
@@ -143,7 +148,12 @@
       <div class="prop wall-poster timetable">THỜI KHÓA BIỂU<br>TOÁN · TIẾNG VIỆT<br>────────<br>KHOA HỌC</div>
       <div class="prop wall-poster evac"><b>SƠ ĐỒ<br>SƠ TÁN</b><svg viewBox="0 0 35 45" width="85%" height="60%"><path d="M5 40 V26 H18 V10 H30" stroke="#668673" stroke-width="2" fill="none"/><circle cx="5" cy="40" r="2" fill="#b4934f"/><circle cx="30" cy="10" r="2" fill="#b4934f"/></svg>4B</div>
       ${state.LockerOpened ? '<div class="prop locker-light"></div>' : ''}`;
-    else if (state.location === 'hallway') $('props').innerHTML = '<div class="prop east-sign">LỐI PHÍA ĐÔNG · KHÔNG ĐI QUA</div>';
+    else if (state.location === 'hallway') $('props').innerHTML = `
+      <div class="prop east-sign">LỐI PHÍA ĐÔNG · KHÔNG ĐI QUA</div>
+      <div class="prop hallway-puddle puddle-1" style="left:40%;top:77%;width:13%;height:8%;border-radius:50%;background:rgba(90,140,160,0.35);box-shadow:0 0 10px rgba(100,160,180,0.4);border:1px solid rgba(180,220,240,0.4);pointer-events:none"></div>
+      <div class="prop hallway-puddle puddle-2" style="left:63%;top:79%;width:11%;height:7%;border-radius:50%;background:rgba(90,140,160,0.32);box-shadow:0 0 8px rgba(100,160,180,0.35);border:1px solid rgba(180,220,240,0.3);pointer-events:none"></div>
+      <div class="prop hallway-obstacle pot" style="left:52%;top:71%;font-size:18px;pointer-events:none">🪴⚠️ <small style="font-size:9px;color:#f0ad4e;background:#142925cc;padding:2px 4px;border-radius:3px">Chậu cây ngã</small></div>
+      <div class="prop hallway-runner" style="left:15%;top:82%;width:70%;height:5%;background:repeating-linear-gradient(90deg,rgba(197,167,107,0.25) 0 20px,transparent 20px 30px);border-top:1px dashed rgba(197,167,107,0.4);pointer-events:none"><span style="font-size:8px;color:#c5a76b;padding-left:8px">GỜ THẢM KHÔ AN TOÀN (DÙNG WASD DI CHUYỂN BÁM THEO CÔ THẢO)</span></div>`;
     else $('props').innerHTML = '';
   }
   function renderSpots() {
@@ -269,9 +279,69 @@
   function showInitialChoice() {
     showPanel('initial-choice', `<span class="eyebrow">TỦ CỦA DUYÊN</span><h2>Bạn nên làm gì?</h2><p>Duyên quên mật mã. Gấu bông vẫn ở trong tủ. Loa trường vừa yêu cầu chuẩn bị sơ tán.</p>
       <button id="choice-leave" class="choice">A. “Để gấu lại, mình đi chờ cô.”<small>Ưu tiên rời đi. Nếu tìm được manh mối ngay, chỉ thử một lần.</small></button>
-      <button id="choice-search" class="choice">B. “Mình thử tìm mật mã thật nhanh.”<small>Khi cô Thảo tới, phải đi ngay.</small></button>`, false);
+      <button id="choice-search" class="choice">B. “Mình thử tìm mật mã thật nhanh.”<small>Khi cô Thảo tới, phải đi ngay.</small></button>
+      <button id="choice-comfort-duyen" class="choice" style="border-left:3px solid #c5a76b">💬 C. “Duyên ơi, bình tĩnh lại nào.” (Trấn an bạn)<small>Gửi lời khuyên an ủi, giúp Duyên bình tĩnh, nhớ lại manh mối hoặc chuẩn bị tinh thần di tản.</small></button>`, false);
     $('choice-leave').onclick = () => { forceClosePanel(); dispatch({ type: 'INITIAL_CHOICE', leave: true }, false); playLine(); };
     $('choice-search').onclick = () => { forceClosePanel(); dispatch({ type: 'INITIAL_CHOICE', leave: false }, false); playLine(); };
+    $('choice-comfort-duyen').onclick = () => showDuyenComfortModal();
+  }
+  function showDuyenComfortModal() {
+    showPanel('duyen-comfort', `<span class="eyebrow">TÂM SỰ CÙNG BẠN · TRẤN AN DUYÊN</span>
+      <h2>Duyên đang cuống quýt</h2>
+      <p>Duyên rơm rớm nước mắt: <em>“Hu hu... tớ cuống quá, quên mật mã rồi! Đó là con gấu bông sinh nhật bố tặng tớ... Giờ phải làm sao đây?”</em></p>
+      <div style="margin:14px 0">
+        <label for="comfort-input" style="font-size:12px;display:block;margin-bottom:6px;color:#50665a">Lời khuyên của bạn dành cho Duyên:</label>
+        <textarea id="comfort-input" rows="3" style="width:100%;box-sizing:border-box;padding:8px 10px;font-family:inherit;font-size:14px;border:1px solid #7c8e82;border-radius:4px" placeholder="Ví dụ: Bình tĩnh nào Duyên, tính mạng là quan trọng nhất! Cậu nhìn lên tường xem sơ đồ chỉ dẫn, hoặc mình đi cùng cô ngay..."></textarea>
+      </div>
+      <div class="button-row">
+        <button id="submit-comfort" class="primary">Gửi lời khuyên</button>
+        <button id="skip-comfort" class="secondary">Quay lại lựa chọn</button>
+      </div>
+      <div id="comfort-reply" style="margin-top:14px;display:none;background:rgba(20,41,37,0.1);padding:12px;border-left:3px solid #2d724f;font-size:14px;line-height:1.6"></div>`, false);
+
+    $('skip-comfort').onclick = () => { showInitialChoice(); };
+    $('submit-comfort').onclick = async () => {
+      const input = ($('comfort-input')?.value || '').trim();
+      const replyBox = $('comfort-reply');
+      $('submit-comfort').disabled = true;
+      replyBox.style.display = 'block';
+      replyBox.textContent = 'Duyên đang lắng nghe bạn...';
+
+      let replyText = '';
+      try {
+        const res = await fetch('/api/radio/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            channel: 'thao',
+            playerName: 'Bạn',
+            message: input || 'Duyên ơi bình tĩnh, tính mạng là quan trọng nhất, gấu bông để sau.',
+            chapter: 1,
+            scene: 'Lớp 4B'
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.reply_text) {
+            replyText = data.reply_text;
+          }
+        }
+      } catch (_) {}
+
+      if (!replyText) {
+        replyText = 'Duyên sụt sùi lau nước mắt gật đầu: “Cậu nói phải... Tính mạng là quan trọng nhất! Tớ bình tĩnh lại rồi. Chúng mình cùng quan sát nhanh sơ đồ trên tường nhé, nếu không được thì phải đi ngay cùng cô!”';
+      }
+
+      replyBox.innerHTML = `<strong>Duyên:</strong> “${replyText}”<div style="margin-top:12px"><button id="comfort-proceed" class="primary">Tiếp tục xử lý khóa tủ →</button></div>`;
+      if (window.VoiceTTS?.isEnabled?.()) {
+        window.VoiceTTS.speak('Duyên', replyText);
+      }
+      $('comfort-proceed').onclick = () => {
+        forceClosePanel();
+        dispatch({ type: 'INITIAL_CHOICE', leave: false }, false);
+        setDialogue('ai-duyen-comfort');
+      };
+    };
   }
   function showLastChoice() {
     showPanel('last-choice', `<span class="eyebrow">CHỈ CÒN ÍT THỜI GIAN</span><h2>Mình phải quyết định.</h2><p>Chỉ còn một đơn vị thời gian an toàn. Đồ vật có thể được người lớn xử lý khi khu vực an toàn.</p><button id="last-try" class="choice">Thử mở tủ lần cuối<small>Đây là lần cuối. Không được chần chừ.</small></button><button id="last-leave" class="choice">Bỏ lại gấu và đi<small>Ưu tiên an toàn. Đây cũng là một kết thúc tốt.</small></button>`, false);
@@ -365,23 +435,126 @@
     $('inspect-bear')?.addEventListener('click', () => toast('Một con gấu nhỏ, đã sờn tai. Duyên giữ nó rất cẩn thận.'));
   }
   function showRules() {
-    showPanel('rules', '<span class="eyebrow">LỜI DẶN CỦA CÔ THẢO</span><h2>Trước khi chúng ta đi</h2><ol class="rules-list"><li><div>Đi cùng người lớn<small>Không tự ý đi một mình.</small></div></li><li><div>Không tách nhóm<small>Luôn đi cùng cô và các bạn.</small></div></li><li><div>Không quay lại lấy đồ<small>Khi đã bắt đầu sơ tán, không quay lại.</small></div></li></ol><button id="understood" class="primary">Đã hiểu →</button>', false);
+    showPanel('rules', `<span class="eyebrow">LỜI DẶN CỦA CÔ THẢO</span><h2>Trước khi chúng ta đi</h2><ol class="rules-list"><li><div>Đi cùng người lớn<small>Không tự ý đi một mình.</small></div></li><li><div>Không tách nhóm<small>Luôn đi cùng cô và các bạn.</small></div></li><li><div>Không quay lại lấy đồ<small>Khi đã bắt đầu sơ tán, không quay lại.</small></div></li></ol>
+    <div style="margin:16px 0 20px;border-top:1px dashed #c5a76b40;padding-top:12px">
+      <button id="ask-thao-safety" class="choice" style="border-left:3px solid #4a806c">
+        💬 Hỏi cô Thảo: “Nếu chỉ nán lại 30 giây để lấy đồ rất quý giá thì có nên không?”
+        <small>Nghe cô Thảo phân tích về ranh giới 30 giây sống còn trong lũ quét.</small>
+      </button>
+    </div>
+    <button id="understood" class="primary">Đã hiểu →</button>`, false);
+    $('ask-thao-safety').onclick = () => { forceClosePanel(); setDialogue('ai-thao-safety'); };
     $('understood').onclick = () => { forceClosePanel(); dispatch({ type: 'PHASE', phase: 'radio' }, false); setDialogue('radio'); };
+  }
+  async function performDebriefEvaluation(customAnswer = null) {
+    const inputElem = $('ch1-debrief-input');
+    const answer = (customAnswer !== null ? customAnswer : (inputElem?.value || '')).trim() ||
+      'Tính mạng con người là trên hết, tuyệt đối không được quay lại lấy đồ đạc hay tiếc của khi có báo động sơ tán khẩn cấp.';
+    const statusElem = $('ch1-debrief-status');
+    const feedbackElem = $('ch1-debrief-feedback');
+    const badgeElem = $('ch1-debrief-badge');
+    const nextChapterLink = $('next-chapter');
+
+    if (statusElem) statusElem.textContent = 'Cô Thảo đang chấm bài...';
+    let result = null;
+
+    try {
+      const response = await fetch('/api/debrief/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chapter: 1,
+          question: 'Khi có báo động sơ tán khẩn cấp, thái độ đúng đắn nhất đối với đồ đạc cá nhân để quên là gì và vì sao?',
+          playerAnswer: answer
+        })
+      });
+      if (response.ok) {
+        result = await response.json();
+      }
+    } catch (_) {}
+
+    if (!result) {
+      const lower = answer.toLowerCase();
+      const dangerous = /(?:quay lại|ở lại|tìm|lấy)\s+(?:lớp|balo|ba lô|cặp|túi|đồ|tiền|điện thoại|tài sản)/i.test(lower);
+      const negated = /(?:không|chớ|đừng|tuyệt đối không|tránh|hạn chế)\s+.*(?:quay lại|lấy đồ|tiếc của)/i.test(lower);
+      if (answer.length < 5) {
+        result = { passed: false, feedback: 'Câu trả lời quá ngắn hoặc chưa nêu rõ hành động an toàn. Trong tình huống khẩn cấp, con cần thể hiện rõ nguyên tắc ưu tiên tính mạng.' };
+      } else if (dangerous && !negated) {
+        result = { passed: false, feedback: 'Chưa đạt! Trong tình huống khẩn cấp, tính mạng con người là quý giá nhất. Tuyệt đối không được quay lại tìm đồ đạc hay tiếc của.' };
+      } else {
+        result = { passed: true, feedback: 'Rất tốt! Cô khen ngợi con đã nắm vững nguyên tắc: Tính mạng là số 1, tuyệt đối không tiếc của quay lại lấy tài sản.' };
+      }
+    }
+
+    if (statusElem) statusElem.textContent = '';
+    if (feedbackElem) {
+      feedbackElem.style.display = 'block';
+      feedbackElem.innerHTML = `<p><strong>Lời nhận xét của Cô Thảo:</strong> “${result.feedback}”</p>`;
+    }
+
+    if (result.passed) {
+      state.debriefPassed = true;
+      save();
+      if (badgeElem) {
+        badgeElem.style.display = 'inline-block';
+        badgeElem.innerHTML = '★ PASS CHƯƠNG 01 — ĐẠT CHUẨN AN TOÀN SƠ TÁN';
+      }
+      if (nextChapterLink) {
+        nextChapterLink.style.display = 'inline-block';
+        nextChapterLink.style.opacity = '1';
+      }
+      if (window.VoiceTTS?.isEnabled?.()) {
+        window.VoiceTTS.speak('Thảo', result.feedback);
+      }
+      toast('Chúc mừng! Con đã nhận được huy hiệu PASS CHƯƠNG 01!');
+    } else {
+      toast('Chưa đạt khảo hạch. Con hãy xem lại nhận xét và bổ sung câu trả lời.');
+    }
+    return result;
   }
   function showResults() {
     const awards = Model.achievements(state);
     const calm = state.LockerAttempt === 0 || (state.LockerOpened && state.LockerAttempt === 1);
     const safety = state.SafetyIntervention ? 'Đã nghe cô Thảo và sơ tán cùng nhóm.' : state.EvacuatedWithoutBear ? 'Đã ưu tiên rời đi thay vì chờ lấy đồ.' : 'Đã lấy gấu trước khi cần rời đi và đi cùng cô.';
-    showPanel('results', `<span class="eyebrow">CHƯƠNG 01 HOÀN THÀNH</span><h2>Cơn Mưa Lớn</h2><p>Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.</p><div class="result-grid"><div class="result-card"><span>QUAN SÁT</span><p>${state.ClueBoardFound ? '✓ Phát hiện manh mối quan trọng.' : 'Lần sau, thử quan sát kỹ các vật trên tường.'}</p></div><div class="result-card"><span>SUY LUẬN</span><p>${state.LockerOpened ? '✓ Giải được mật mã đường đi.' : state.RouteUnderstood ? '✓ Hiểu quy luật của tuyến sơ tán.' : 'Gấu ở lại trong tủ. Bạn vẫn hoàn thành scene.'}</p></div><div class="result-card"><span>BÌNH TĨNH</span><p>${calm ? '✓ Không thử mật mã ngẫu nhiên nhiều lần.' : 'Dành thời gian quan sát trước khi thử lại.'}</p></div><div class="result-card"><span>AN TOÀN</span><p>✓ ${safety}</p></div></div><h3>Thành tích</h3>${awards.map(name => '<span class="achievement">✧ ' + name + '</span>').join('') || '<p>Đã hoàn thành sơ tán cùng cô Thảo.</p>'}<div class="journal-entry" style="margin-top:20px"><span class="eyebrow">HÀNH TRÌNH TIẾP TỤC · 09:12</span><h3>Ba con đường</h3><p>Khảo sát ba tuyến và tìm đường lên điểm tập kết cùng cô Thảo, Duyên và bác Mạnh.</p><a id="next-chapter" class="primary" href="chapter02.html?from=chapter01">Ra cổng trường · Chương 02 →</a></div><div class="button-row"><button id="replay" class="primary">Chơi lại scene 1</button><button id="back-title" class="secondary">Về màn hình đầu</button></div>`, false, true);
-    $('next-chapter').onclick = () => { save(); stopWalking(); };
+    showPanel('results', `<span class="eyebrow">CHƯƠNG 01 HOÀN THÀNH</span><h2>Cơn Mưa Lớn</h2><p>Quan sát — Bình tĩnh — Không chần chừ — Đi theo hướng dẫn.</p><div class="result-grid"><div class="result-card"><span>QUAN SÁT</span><p>${state.ClueBoardFound ? '✓ Phát hiện manh mối quan trọng.' : 'Lần sau, thử quan sát kỹ các vật trên tường.'}</p></div><div class="result-card"><span>SUY LUẬN</span><p>${state.LockerOpened ? '✓ Giải được mật mã đường đi.' : state.RouteUnderstood ? '✓ Hiểu quy luật của tuyến sơ tán.' : 'Gấu ở lại trong tủ. Bạn vẫn hoàn thành scene.'}</p></div><div class="result-card"><span>BÌNH TĨNH</span><p>${calm ? '✓ Không thử mật mã ngẫu nhiên nhiều lần.' : 'Dành thời gian quan sát trước khi thử lại.'}</p></div><div class="result-card"><span>AN TOÀN</span><p>✓ ${safety}</p></div></div><h3>Thành tích</h3>${awards.map(name => '<span class="achievement">✧ ' + name + '</span>').join('') || '<p>Đã hoàn thành sơ tán cùng cô Thảo.</p>'}    <div id="ch1-debrief-modal" class="debrief-container" style="margin-top:18px;padding:16px;background:rgba(20,41,37,0.85);border:1px solid #c5a76b;border-radius:4px;color:#f2ead5">
+      <span class="eyebrow" style="color:#c5a76b">KHẢO HẠCH AN TOÀN · CÔ GIÁO THẢO</span>
+      <h3 style="margin:6px 0 10px;font-size:16px;color:#ffd591">Sát hạch qua chương trước khi ra cổng trường:</h3>
+      <p style="font-size:13px;line-height:1.5;margin-bottom:10px;color:#e8e0cc">
+        <strong>Câu hỏi:</strong> “Khi có báo động sơ tán khẩn cấp, thái độ đúng đắn nhất đối với đồ đạc cá nhân để quên là gì và vì sao?”
+      </p>
+      <textarea id="ch1-debrief-input" rows="2" style="width:100%;box-sizing:border-box;background:#0d1c1a;border:1px solid #7c8e82;color:#fff;padding:8px 10px;font-family:inherit;font-size:13px;border-radius:3px" placeholder="Nhập câu trả lời của bạn...">Tuyệt đối không quay lại lấy đồ đạc vì tính mạng con người là quan trọng nhất.</textarea>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap">
+        <button id="ch1-debrief-submit" class="primary" style="padding:6px 14px;min-height:36px;font-size:13px">Gửi câu trả lời cho Cô Thảo chấm</button>
+        <span id="ch1-debrief-status" style="font-size:12px;color:#d5bd87"></span>
+        <span id="ch1-debrief-badge" class="badge pass-badge" style="display:${state.debriefPassed ? 'inline-block' : 'none'};background:#2d724f;color:#fff;padding:5px 10px;border-radius:3px;font-weight:bold;font-size:12px">★ PASS CHƯƠNG 01 — ĐẠT CHUẨN AN TOÀN SƠ TÁN</span>
+      </div>
+      <div id="ch1-debrief-feedback" style="display:none;margin-top:10px;font-size:13px;line-height:1.5;color:#f2ead5;background:#142925a0;padding:8px 12px;border-radius:3px"></div>
+    </div>
+    <div class="journal-entry" style="margin-top:20px"><span class="eyebrow">HÀNH TRÌNH TIẾP TỤC · 09:12</span><h3>Ba con đường</h3><p>Khảo sát ba tuyến và tìm đường lên điểm tập kết cùng cô Thảo, Duyên và bác Mạnh.</p><a id="next-chapter" class="primary" href="chapter02.html?from=chapter01" style="${state.debriefPassed ? '' : 'opacity:0.9'}">Ra cổng trường · Chương 02 →</a></div><div class="button-row"><button id="replay" class="primary">Chơi lại scene 1</button><button id="back-title" class="secondary">Về màn hình đầu</button></div>`, false, true);
+    $('next-chapter').onclick = async (event) => {
+      if (!state.debriefPassed) {
+        event.preventDefault();
+        const res = await performDebriefEvaluation();
+        if (res && res.passed) {
+          save();
+          stopWalking();
+          window.location.href = $('next-chapter').href;
+        }
+        return;
+      }
+      save();
+      stopWalking();
+    };
+    $('ch1-debrief-submit').onclick = () => performDebriefEvaluation();
     $('replay').onclick = startNew;
     $('back-title').onclick = () => { forceClosePanel(); active = false; updateJourneyTitle(); saved = readSave(); $('continue').hidden = !saved; state = Model.fresh(); render(); };
   }
   function showSettings() {
-    showPanel('settings', `<span class="eyebrow">CÀI ĐẶT & HƯỚNG DẪN</span><h2>Chơi theo nhịp của bạn</h2><p>WASD hoặc phím mũi tên: di chuyển. E: tương tác khi đứng gần. Bấm/chạm: khám phá đồ vật. Enter hoặc Space: đọc tiếp. Esc: đóng cửa sổ. I: túi đồ. J: sổ tay.</p><p>Không có đếm ngược thực. Ba chấm là thời gian chuẩn bị còn lại; chỉ mất một chấm khi xác nhận mã sai. Bỏ lại gấu vẫn hoàn thành scene.</p><div class="button-row"><button id="toggle-motion" class="secondary">${state.settings.reducedMotion ? 'Bật' : 'Giảm'} chuyển động</button><button id="toggle-spots" class="secondary">${state.settings.showSpots ? 'Ẩn' : 'Hiện'} vùng tương tác</button><button id="toggle-audio" class="secondary">${state.settings.sound ? 'Tắt' : 'Bật'} âm thanh</button></div><div class="note">Tiến trình được lưu tự động trên trình duyệt này. Nếu trình duyệt chặn lưu trữ, trò chơi vẫn chạy trong phiên hiện tại.</div>${active ? '<div class="button-row"><button id="return-title" class="secondary">Lưu và về màn hình đầu</button></div>' : ''}`);
+    showPanel('settings', `<span class="eyebrow">CÀI ĐẶT & HƯỚNG DẪN</span><h2>Chơi theo nhịp của bạn</h2><p>WASD hoặc phím mũi tên: di chuyển. E: tương tác khi đứng gần. Bấm/chạm: khám phá đồ vật. Enter hoặc Space: đọc tiếp. Esc: đóng cửa sổ. I: túi đồ. J: sổ tay.</p><p>Không có đếm ngược thực. Ba chấm là thời gian chuẩn bị còn lại; chỉ mất một chấm khi xác nhận mã sai. Bỏ lại gấu vẫn hoàn thành scene.</p><div class="button-row"><button id="toggle-motion" class="secondary">${state.settings.reducedMotion ? 'Bật' : 'Giảm'} chuyển động</button><button id="toggle-spots" class="secondary">${state.settings.showSpots ? 'Ẩn' : 'Hiện'} vùng tương tác</button><button id="toggle-audio" class="secondary">${state.settings.sound ? 'Tắt' : 'Bật'} âm thanh</button><button id="toggle-voice" class="secondary">${window.VoiceTTS?.isEnabled?.() ? 'Tắt' : 'Bật'} giọng đọc AI</button></div><div class="note">Tiến trình được lưu tự động trên trình duyệt này. Nếu trình duyệt chặn lưu trữ, trò chơi vẫn chạy trong phiên hiện tại.</div>${active ? '<div class="button-row"><button id="return-title" class="secondary">Lưu và về màn hình đầu</button></div>' : ''}`);
     $('toggle-motion').onclick = () => { dispatch({ type: 'SETTINGS', reducedMotion: !state.settings.reducedMotion }); showSettings(); };
     $('toggle-spots').onclick = () => { dispatch({ type: 'SETTINGS', showSpots: !state.settings.showSpots }); showSettings(); };
     $('toggle-audio').onclick = () => { toggleSound(); showSettings(); };
+    $('toggle-voice').onclick = () => { if (window.VoiceTTS) window.VoiceTTS.toggle(); showSettings(); };
     $('return-title')?.addEventListener('click', () => { save(); saved = readSave(); active = false; forceClosePanel(); $('continue').hidden = !saved; state = Model.fresh(); render(); });
   }
   function toggleSound() { dispatch({ type: 'SETTINGS', sound: !state.settings.sound }); sound.setEnabled(state.settings.sound); if (state.settings.sound) sound.start(); }
@@ -435,7 +608,20 @@
   }
   function movePlayer(dx, dy, delta) {
     const previous = state.player;
-    const candidate = Navigation.move(previous, { x: previous.x + dx * delta * 13, y: previous.y + dy * delta * 13 }, state.location, state.escortX, actorObstacles());
+    let candidate = Navigation.move(previous, { x: previous.x + dx * delta * 13, y: previous.y + dy * delta * 13 }, state.location, state.escortX, actorObstacles());
+    if (state.location === 'hallway') {
+      // Chướng ngại vật chậu cây ngã (obstacle pot tại x: 50-54, y: 68-73)
+      if (candidate.x >= 50 && candidate.x <= 54 && candidate.y >= 68 && candidate.y <= 73) {
+        candidate.y = Math.min(candidate.y, 67.5);
+        toast('Cẩn thận chậu cây ngã! Hãy đi vòng qua gờ thảm khô bên dưới.');
+      }
+      // Vũng nước mưa trơn trượt (puddle 1: x: 39-51, y: 76-80; puddle 2: x: 62-73, y: 78-83)
+      const inPuddle = (candidate.x >= 39 && candidate.x <= 51 && candidate.y >= 76 && candidate.y <= 80) ||
+                       (candidate.x >= 62 && candidate.x <= 73 && candidate.y >= 78 && candidate.y <= 83);
+      if (inPuddle) {
+        toast('Vũng nước mưa trơn trượt! Hãy giữ vững bước chân trên gờ thảm khô.'); sound.play('click');
+      }
+    }
     state = Model.step(state, { type: 'MOVE', x: candidate.x, y: candidate.y });
     const moved = Math.hypot(state.player.x - previous.x, state.player.y - previous.y) > .001;
     if (moved) { moveDirty = true; if (Math.abs(dx) > .1) facing = dx > 0 ? 1 : -1; }
@@ -546,6 +732,16 @@
   };
   $('continue').onclick = continueGame; $('next').onclick = nextLine;
   $('settings').onclick = showSettings; $('sound').onclick = toggleSound;
+  const voiceBtn = $('voice-toggle');
+  if (voiceBtn) {
+    voiceBtn.onclick = () => {
+      if (window.VoiceTTS) {
+        const on = window.VoiceTTS.toggle();
+        voiceBtn.style.opacity = on ? '1' : '0.5';
+        toast(on ? 'Đã bật giọng đọc AI.' : 'Đã tắt giọng đọc AI.');
+      }
+    };
+  }
   $('hint').onclick = showHints; $('journal').onclick = showJournal; $('inventory').onclick = showInventory;
   $('overlay').onclick = event => { if (event.target === $('overlay')) closePanel(); };
   $('world').onclick = event => {
