@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sau-con-mua:npc-response:0.1",
+  "title": "Approved NPC Reply Selection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "stage_revision",
+    "reply_id"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "stage_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reply_id": {
+      "type": "string",
+      "enum": [
+        "minh_accept",
+        "minh_regret",
+        "minh_worried",
+        "minh_ask_teacher",
+        "minh_redirect"
+      ]
+    }
+  }
+}

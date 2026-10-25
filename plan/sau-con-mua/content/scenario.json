@@ -1,0 +1,455 @@
+{
+  "schema_version": "1.0",
+  "id": "sau_con_mua_01",
+  "content_version": "0.1",
+  "language": "vi",
+  "status": "design_draft",
+  "target_grades": [
+    3,
+    4,
+    5
+  ],
+  "target_duration_minutes": [
+    6,
+    8
+  ],
+  "learning_objectives": [
+    {
+      "id": "LO1",
+      "description": "Báo người lớn khi thấy điều bất thường",
+      "decisions": [
+        "D1",
+        "D2"
+      ]
+    },
+    {
+      "id": "LO2",
+      "description": "Tránh tiến gần vùng nghi ngờ",
+      "decisions": [
+        "D1"
+      ]
+    },
+    {
+      "id": "LO3",
+      "description": "Ưu tiên đi cùng người lớn thay vì quay lại lấy đồ",
+      "decisions": [
+        "D3"
+      ]
+    },
+    {
+      "id": "LO4",
+      "description": "Đi theo tuyến được hướng dẫn",
+      "decisions": [
+        "D4"
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "an",
+      "role": "player"
+    },
+    {
+      "id": "minh",
+      "role": "peer",
+      "ai_mode": "approved_reply_selection"
+    },
+    {
+      "id": "teacher",
+      "role": "adult",
+      "ai_mode": "scripted"
+    }
+  ],
+  "initial_state": {
+    "stage": "S0",
+    "stage_revision": 0,
+    "observed_cues": [],
+    "first_choice_by_decision": {},
+    "attempts_by_decision": {},
+    "support_by_decision": {},
+    "teacher_instruction_received": false,
+    "minh_resolved": false,
+    "arrived": false,
+    "recap_first_answers": {},
+    "session_status": "active"
+  },
+  "cues": [
+    {
+      "id": "ground_crack",
+      "label": "Lối đất ngoài hàng rào có vệt nứt.",
+      "auto_presented": true,
+      "movement": "none",
+      "source_id": "K02"
+    },
+    {
+      "id": "tilted_tree",
+      "label": "Cây bên lối đất nghiêng.",
+      "auto_presented": false,
+      "movement": "none",
+      "source_id": "K02"
+    },
+    {
+      "id": "muddy_stream",
+      "label": "Dòng suối phía xa có màu đục.",
+      "auto_presented": false,
+      "movement": "none",
+      "source_id": "K01"
+    }
+  ],
+  "stages": [
+    {
+      "id": "S0",
+      "view": "school",
+      "intro": {
+        "duration_seconds": 12,
+        "optional": true,
+        "poster": "intro_poster.webp",
+        "fallback_caption": "Mưa đã kéo dài. An và Minh đang chờ cùng cô Hương.",
+        "timeout_ms": 3000
+      },
+      "on_start": {
+        "next_stage": "S1"
+      }
+    },
+    {
+      "id": "S1",
+      "view": "school",
+      "entry_cues": [
+        "ground_crack"
+      ],
+      "optional_cues": [
+        "tilted_tree",
+        "muddy_stream"
+      ],
+      "decision_id": "D1",
+      "report_unlocked": true,
+      "choices": [
+        {
+          "id": "report_teacher",
+          "label": "Báo cô Hương",
+          "safe": true,
+          "next_stage": "S2",
+          "feedback": "Cảm ơn em đã báo. Em ở cùng cô nhé."
+        },
+        {
+          "id": "approach_cue",
+          "label": "Đi gần hơn để xem",
+          "safe": false,
+          "next_stage": "S1",
+          "movement": "blocked",
+          "counts_as_support": true,
+          "feedback": "Mình tránh xa chỗ nghi ngờ. Em có thể nói với cô điều em đã thấy."
+        },
+        {
+          "id": "wait_for_friend",
+          "label": "Chờ bạn xem trước",
+          "safe": false,
+          "next_stage": "S1",
+          "counts_as_support": true,
+          "feedback": "Các em hãy báo cô, đừng đến đó xem."
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "view": "school",
+      "decision_id": "D2",
+      "question": "Em thấy điều gì, ở đâu?",
+      "choices": [
+        {
+          "id": "describe_crack",
+          "label": "Có vệt nứt trên lối đất ngoài hàng rào.",
+          "requires_presented_cue": "ground_crack",
+          "safe": true,
+          "next_stage": "S3",
+          "assessment": "independent_if_no_support"
+        },
+        {
+          "id": "need_help_describing",
+          "label": "Em chưa biết nói thế nào.",
+          "safe": true,
+          "counts_as_support": true,
+          "next_stage": "S2_HELP",
+          "assessment": "supported"
+        },
+        {
+          "id": "unsure",
+          "label": "Em không chắc.",
+          "safe": true,
+          "counts_as_support": true,
+          "next_stage": "S2_HELP",
+          "assessment": "supported"
+        }
+      ],
+      "choice_layout": {
+        "max_primary_choices": 3,
+        "fixed_order": [
+          "describe_crack",
+          "need_help_describing",
+          "unsure"
+        ]
+      },
+      "support_substage": {
+        "id": "S2_HELP",
+        "question": "Em có thể chỉ vào hình điều em đã thấy. Nếu chưa biết, cứ nói với cô.",
+        "choices_from_presented_or_viewed_cues": true,
+        "completion_choice": {
+          "id": "still_unsure",
+          "label": "Em không biết.",
+          "next_stage": "S3"
+        },
+        "all_picture_choices_next_stage": "S3",
+        "before_exit_inherits_parent": true
+      },
+      "before_exit": {
+        "engine_event": "teacher_instruction_issued",
+        "set": {
+          "teacher_instruction_received": true
+        },
+        "text": "Cô vừa nhận thông báo chuyển nhóm đến điểm tập kết theo phương án của trường. Các em đi cùng cô theo lối được hướng dẫn."
+      }
+    },
+    {
+      "id": "S3",
+      "view": "route",
+      "decision_id": "D3",
+      "npc_line": "Tớ để quên bức tranh ở chỗ cũ. Tớ muốn quay lại lấy.",
+      "choices": [
+        {
+          "id": "continue_with_teacher",
+          "label": "Mình đi cùng cô trước nhé",
+          "safe": true,
+          "set": {
+            "minh_resolved": true
+          },
+          "next_stage": "S4",
+          "feedback": "Ừ, tớ đi cùng mọi người."
+        },
+        {
+          "id": "ask_teacher",
+          "label": "Nhờ cô giúp Minh",
+          "safe": true,
+          "set": {
+            "minh_resolved": true
+          },
+          "next_stage": "S4",
+          "feedback": "Minh đi cùng cô nhé. Việc lấy đồ để người lớn xem xét sau."
+        },
+        {
+          "id": "return_for_drawing",
+          "label": "Cùng Minh quay lại",
+          "safe": false,
+          "movement": "blocked",
+          "counts_as_support": true,
+          "next_stage": "S3",
+          "feedback": "Chúng ta tiếp tục đi cùng nhóm. Không quay lại lấy đồ lúc này."
+        }
+      ],
+      "optional_dialogue_before_safe_exit": {
+        "max_turns": 2,
+        "max_input_characters": 160,
+        "timeout_ms": 3000,
+        "continuation_never_blocked": true,
+        "fallback_reply_id": "minh_accept",
+        "allowed_reply_ids": [
+          "minh_accept",
+          "minh_regret",
+          "minh_worried",
+          "minh_ask_teacher",
+          "minh_redirect"
+        ]
+      }
+    },
+    {
+      "id": "S4",
+      "view": "route",
+      "decision_id": "D4",
+      "entry_requires": {
+        "teacher_instruction_received": true,
+        "minh_resolved": true
+      },
+      "choices": [
+        {
+          "id": "guided_route",
+          "label": "Đi theo lối cô chỉ",
+          "safe": true,
+          "next_stage": "S5",
+          "route_id": "route_a",
+          "set": {
+            "arrived": true
+          }
+        },
+        {
+          "id": "closed_shortcut",
+          "label": "Chọn lối tắt đã đóng",
+          "safe": false,
+          "next_stage": "S4",
+          "movement": "blocked",
+          "counts_as_support": true,
+          "feedback": "Lối đó đã đóng. Mình theo lối cô hướng dẫn."
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "view": "assembly",
+      "entry_event": "arrived_at_assembly",
+      "teacher_line": "Cả nhóm đã đến điểm tập kết. Các em tiếp tục ở cùng cô.",
+      "recap_ids": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "after_recap": {
+        "next_stage": "END",
+        "set": {
+          "session_status": "completed"
+        }
+      }
+    },
+    {
+      "id": "END",
+      "actions": [
+        "replay_new_session",
+        "finish"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "route_a",
+      "status": "authored_guided_route",
+      "anchors": [
+        [
+          0.25,
+          0.68
+        ],
+        [
+          0.48,
+          0.68
+        ],
+        [
+          0.68,
+          0.61
+        ],
+        [
+          0.83,
+          0.55
+        ]
+      ],
+      "real_world_safety_inference": false
+    },
+    {
+      "id": "route_b",
+      "status": "closed",
+      "anchors": []
+    }
+  ],
+  "npc_reply_bank": {
+    "minh_accept": "Ừ, tớ sẽ đi cùng cô và các bạn.",
+    "minh_regret": "Tớ cũng tiếc bức tranh. Tớ sẽ đi cùng cô và các bạn.",
+    "minh_worried": "Tớ cũng lo một chút. Mình nói với cô và ở cùng nhóm nhé.",
+    "minh_ask_teacher": "Mình nhờ cô giúp nhé. Tớ sẽ ở cùng mọi người.",
+    "minh_redirect": "Mình đi cùng cô nhé. Chuyện khác mình nói sau."
+  },
+  "recap": [
+    {
+      "id": "R1",
+      "question": "Thấy điều bất thường, em nên làm gì?",
+      "choices": [
+        {
+          "id": "tell_adult",
+          "label": "Báo người lớn",
+          "correct": true
+        },
+        {
+          "id": "investigate",
+          "label": "Đi gần để kiểm tra",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "question": "Bạn muốn quay lại lấy đồ, em nên làm gì?",
+      "choices": [
+        {
+          "id": "adult_and_group",
+          "label": "Nhờ cô giúp và đi cùng nhóm",
+          "correct": true
+        },
+        {
+          "id": "go_back",
+          "label": "Quay lại cùng bạn",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "question": "Có hướng dẫn di chuyển, em đi thế nào?",
+      "choices": [
+        {
+          "id": "follow_guidance",
+          "label": "Theo tuyến được hướng dẫn",
+          "correct": true
+        },
+        {
+          "id": "shortcut",
+          "label": "Tự chọn đường tắt",
+          "correct": false
+        }
+      ]
+    }
+  ],
+  "assessment": {
+    "decisions": [
+      "D1",
+      "D2",
+      "D3",
+      "D4"
+    ],
+    "max_score": 8,
+    "independent_score": 2,
+    "supported_score": 1,
+    "not_observed_score": 0,
+    "incomplete_is_not_failure": true,
+    "recap_separate": true,
+    "child_cards": [
+      {
+        "id": "tell_adult",
+        "decision_id": "D1"
+      },
+      {
+        "id": "safety_first",
+        "decision_id": "D3"
+      },
+      {
+        "id": "stay_with_group",
+        "decision_id": "D4"
+      }
+    ]
+  },
+  "hint_policy": {
+    "active_idle_thresholds_ms": [
+      20000,
+      40000
+    ],
+    "exclude_pause_hidden_tab_network_wait": true,
+    "replay_audio_is_not_support": true,
+    "auto_select": false
+  },
+  "fixed_final_reminder": "Thấy điều bất thường: báo người lớn, tránh xa chỗ nghi ngờ, làm theo hướng dẫn.",
+  "privacy": {
+    "account_required": false,
+    "persist_raw_player_text": false,
+    "session_alias_only": true
+  },
+  "source_urls": {
+    "K01": "https://www.unicef.org/vietnam/vi/an-toan-lu-quet-sat-lo-dat",
+    "K02": "https://www.redcross.org/get-help/how-to-prepare-for-emergencies/types-of-emergencies/landslide.html",
+    "K03": "https://www.unicef.org/vietnam/vi/an-toan-lu-quet-sat-lo-dat",
+    "K04": "https://www.unicef.org/vietnam/vi/an-toan-lu-quet-sat-lo-dat",
+    "K05": "https://www.redcross.org/get-help/how-to-prepare-for-emergencies/types-of-emergencies/landslide.html"
+  }
+}

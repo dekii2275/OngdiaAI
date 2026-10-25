@@ -22,3 +22,7 @@
 Thumbs.db
 /node_modules/
 /tmp/
+.agent/
+.superpowers/
+Docs/
+.env
