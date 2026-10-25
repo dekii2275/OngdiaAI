@@ -3,6 +3,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { selectNpcReply } = require('./server/ai-bridge.js');
 const { handleRadioChat } = require('./server/radio-ai-handler.js');
+const { 
+  handleChapterDebrief, 
+  handleBridgeBlueprint, 
+  handleIncidentDispatch, 
+  handleMedicalTriage 
+} = require('./server/debrief-ai-handler.js');
 
 const root = __dirname;
 const types = { 
@@ -57,6 +63,90 @@ const server = http.createServer((req, res) => {
           message: data.message || '',
           chapter: Number(data.chapter || 3),
           scene: data.scene || ''
+        });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API Route: Debrief Evaluate (Khảo hạch pass chương)
+  if (req.method === 'POST' && pathname === '/api/debrief/evaluate') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleChapterDebrief({
+          chapter: data.chapter,
+          question: data.question,
+          playerAnswer: data.playerAnswer !== undefined ? data.playerAnswer : data.player_answer
+        });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API Route: Tactical Bridge Blueprint (Phác đồ vượt cầu tre)
+  if (req.method === 'POST' && pathname === '/api/tactical/bridge-blueprint') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleBridgeBlueprint({
+          inspectionData: data.inspectionData,
+          inspection: data.inspection
+        });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API Route: Tactical Incident Dispatch (Bức điện cứu nạn Huyện)
+  if (req.method === 'POST' && pathname === '/api/tactical/incident-dispatch') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleIncidentDispatch({
+          hazards: data.hazards
+        });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API Route: Medical Triage Solver (Cố vấn y tế 3 ca khủng hoảng)
+  if (req.method === 'POST' && pathname === '/api/medical/triage-solver') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleMedicalTriage({
+          caseId: data.caseId !== undefined ? data.caseId : data.case_id,
+          solutionText: data.solutionText !== undefined ? data.solutionText : data.solution_text
         });
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify(result));
