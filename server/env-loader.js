@@ -31,7 +31,7 @@ function loadEnvFile() {
 function getGeminiConfig() {
   const env = loadEnvFile();
   const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY || '';
-  const model = process.env.GEMINI_MODEL || env.GEMINI_MODEL || 'gemini-2.0-flash-lite';
+  const model = process.env.GEMINI_MODEL || env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   return { apiKey, model };
 }
 

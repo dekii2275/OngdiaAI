@@ -2,6 +2,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const { selectNpcReply } = require('./server/ai-bridge.js');
+const { handleRadioChat } = require('./server/radio-ai-handler.js');
 
 const root = __dirname;
 const types = { 
@@ -32,6 +33,30 @@ const server = http.createServer((req, res) => {
           requestId: data.request_id || 'req-' + Date.now(),
           stageRevision: Number(data.stage_revision || 0),
           playerText: String(data.player_text || '')
+        });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API Route: Emergency Rescue AI Radio Chat
+  if (req.method === 'POST' && pathname === '/api/radio/chat') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleRadioChat({
+          channel: data.channel || 'minh_anh',
+          playerName: data.playerName || 'Bạn',
+          message: data.message || '',
+          chapter: Number(data.chapter || 3),
+          scene: data.scene || ''
         });
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify(result));
