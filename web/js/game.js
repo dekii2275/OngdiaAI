@@ -313,7 +313,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            channel: 'thao',
+            channel: 'duyen',
             playerName: 'Bạn',
             message: input || 'Duyên ơi bình tĩnh, tính mạng là quan trọng nhất, gấu bông để sau.',
             chapter: 1,

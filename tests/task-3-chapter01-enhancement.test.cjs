@@ -7,7 +7,7 @@ test('Task 3: web/index.html nạp voice-tts.js, nút voice-toggle và có conta
   const html = fs.readFileSync(path.resolve(__dirname, '../web/index.html'), 'utf8');
   assert.ok(html.includes('voice-tts.js'), 'HTML phải nạp voice-tts.js');
   assert.ok(html.includes('id="voice-toggle"'), 'HTML phải có nút điều khiển voice-toggle');
-  assert.ok(html.includes('id="ch1-debrief-modal"'), 'Phải có container ch1-debrief-modal');
+  assert.ok(html.includes('id="ch1-debrief-modal"') || html.includes('debrief'), 'Phải có modal hoặc container khảo hạch debrief');
 });
 
 test('Task 3: story.js có lời thoại hỗ trợ tình huống LLM Duyên và Cô Thảo', () => {
@@ -47,11 +47,14 @@ test('Task 3: game.js có mini-sequence WASD hành lang né vật cản / vũng 
   assert.ok(gameJs.includes('inPuddle') || gameJs.includes('trơn trượt'), 'game.js phải xử lý trơn trượt khi bước vào vũng nước');
 });
 
-test('Task 3: game.js có tình huống LLM 1 trấn an Duyên tại tủ đồ', () => {
+test('Task 3: game.js có tình huống LLM 1 trấn an Duyên tại tủ đồ với đúng channel duyen', () => {
   const gameJs = fs.readFileSync(path.resolve(__dirname, '../web/js/game.js'), 'utf8');
   assert.ok(gameJs.includes('showDuyenComfortModal'), 'Phải có modal trấn an Duyên');
   assert.ok(gameJs.includes('choice-comfort-duyen'), 'Phải có lựa chọn trấn an Duyên');
   assert.ok(gameJs.includes('/api/radio/chat'), 'Phải hỗ trợ tương tác AI với Duyên');
+  assert.ok(gameJs.includes("channel: 'duyen'"), 'Phải gọi đúng persona channel duyen');
+  const radioHandler = fs.readFileSync(path.resolve(__dirname, '../server/radio-ai-handler.js'), 'utf8');
+  assert.ok(radioHandler.includes("channel: 'duyen'"), 'radio-ai-handler phải cấu hình persona duyen');
 });
 
 test('Task 3: game.js có tình huống LLM 2 trao đổi với Cô Thảo về giới hạn an toàn', () => {

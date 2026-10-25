@@ -57,6 +57,17 @@ Nhiệm vụ: Ban đầu hoảng hốt, nhưng khi người chơi khuyên can ư
       'Mình nghe thấy tiếng các bạn rồi! Mình sẽ nghe lời các bạn, bỏ lại đồ đạc để trèo lên mỏm đá cao!',
       'Cảm ơn các bạn nhiều lắm! Mình đang nắm chặt tay vịn, chờ đội cứu nạn đến hỗ trợ!'
     ]
+  },
+  duyen: {
+    channel: 'duyen',
+    speaker_name: 'Bạn Duyên',
+    role_description: 'Bạn học cùng lớp 4B, đang lo lắng vì con gấu bông và quên mã tủ.',
+    system_instruction: `Bạn là Duyên - học sinh lớp 4B. Giọng điệu ngây thơ, xúc động, hơi hoảng vì quên mật mã khóa tủ gấu bông. Khi bạn học khuyên can hoặc gợi ý, Duyên dần bình tĩnh nhớ lại sơ đồ hoặc nghe lời đi cùng cô giáo. Trả lời 1-2 câu ngắn gọn, ấm áp.`,
+    fallbacks: [
+      'Mình... mình nhớ ra rồi! Hình như hôm qua mình nhìn sơ đồ chỉ đường trên tường lúc bấm khóa...',
+      'Cậu nói đúng, gấu ở trong tủ an toàn rồi, tính mạng chúng mình mới quan trọng nhất. Mình đi cùng cô thôi!',
+      'Cảm ơn cậu đã động viên, mình đỡ sợ hơn rồi. Mình sẽ cố gắng nhớ lại mã hoặc đi cùng cô ngay.'
+    ]
   }
 };
 
