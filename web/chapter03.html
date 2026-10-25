@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101e20">
+  <title>Vết nứt sườn đồi — Chương 03</title>
+  <link rel="stylesheet" href="typography.css">
+  <link rel="stylesheet" href="chapter03.css">
+  <link rel="stylesheet" href="radio-ai.css">
+  <script defer src="js/journey.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/radio-ai.js"></script>
+  <script defer src="js/chapter03-data.js"></script>
+  <script defer src="js/chapter03-puzzles.js"></script>
+  <script defer src="js/chapter03.js"></script>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <a class="brand" href="index.html">
+      <span class="brand-icon">雨</span>
+      <span>
+        <small>MỘT CÂU CHUYỆN TRONG LÀNG</small>
+        <strong>Cơn Mưa Lớn</strong>
+      </span>
+    </a>
+    <span class="chapter">CHƯƠNG 03 <i>/</i> VẾT NỨT SƯỜN ĐỒI</span>
+    <div class="header-controls">
+      <button id="btn-radio" class="hud-radio-btn" title="Mở bộ đàm liên lạc cứu hộ (Phím R)">
+        <span class="radio-led-indicator"></span>BỘ ĐÀM AI <kbd>R</kbd>
+      </button>
+      <button id="sound" aria-label="Bật âm thanh">Âm thanh: tắt</button>
+    </div>
+  </header>
+
+  <section id="stage" aria-label="Màn chơi Vết nứt sườn đồi">
+    <div id="landscape"></div>
+    <div class="grade"></div>
+    <canvas id="rain" aria-hidden="true"></canvas>
+
+    <div id="scene-caption">
+      <small>09:45 · VÙNG SƯỜN ĐỒI NGUY HIỂM</small>
+      <h2 id="scene-name"></h2>
+    </div>
+
+    <aside id="mission">
+      <small>MỤC TIÊU HIỆN TẠI</small>
+      <p id="objective"></p>
+      <span id="progress"></span>
+    </aside>
+
+    <div id="spots"></div>
+
+    <div id="party" aria-label="Bạn, Duyên và cô Thảo">
+      <img class="companion teacher" src="assets/characters/thao/idle.png" alt="Cô Thảo">
+      <img id="player" src="assets/characters/ban/idle.png" alt="Bạn">
+      <img class="companion girl" src="assets/characters/duyen/idle.png" alt="Duyên">
+    </div>
+
+    <div id="location-toast" role="status"></div>
+
+    <div id="intro">
+      <small>CHƯƠNG THỨ BA · 09:45 SÁNG</small>
+      <h1>Vết nứt<br><em>sườn đồi</em></h1>
+      <div class="rule"></div>
+      <p>
+        Sau tiếng nổ ầm từ thung lũng, con đường men sườn đồi xuất hiện những vết nứt toác.<br>
+        Quan sát kỹ các dấu hiệu sạt trượt địa chất, liên lạc Bộ đàm AI và tìm đường vòng an toàn.
+      </p>
+      <button id="start" class="primary">Tiến lên sườn đồi <span>→</span></button>
+      <p id="journey-summary" class="journey-summary" hidden></p>
+      <a href="chapter02.html">← Trở về Chương 02</a>
+      <small class="intro-foot">QUAN SÁT VẾT NỨT · ĐÁNH GIÁ NGUY CƠ · LIÊN LẠC BỘ ĐÀM</small>
+    </div>
+
+    <section id="dialogue" hidden aria-label="Hội thoại">
+      <img id="portrait" alt="">
+      <div>
+        <small id="speaker"></small>
+        <p id="line" aria-live="polite"></p>
+      </div>
+      <button id="next">Tiếp tục ↵</button>
+    </section>
+  </section>
+
+  <footer>
+    <span class="help"><kbd>WASD / Phím mũi tên</kbd> di chuyển · <kbd>E / Click</kbd> tương tác · <kbd>R</kbd> Bộ đàm cứu hộ</span>
+    <nav>
+      <button id="btn-radio-footer" class="hud-radio-btn">Bộ đàm AI <kbd>R</kbd></button>
+      <button id="journal">Sổ tay <kbd>J</kbd></button>
+    </nav>
+    <small id="save">TỰ ĐỘNG LƯU</small>
+  </footer>
+</main>
+
+<div id="modal" hidden>
+  <section id="panel" role="dialog" aria-modal="true" aria-label="Bảng tương tác" tabindex="-1"></section>
+</div>
+</body>
+</html>
