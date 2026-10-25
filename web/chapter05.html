@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101e20">
+  <title>Đỉnh đồi an toàn — Chương 05</title>
+  <link rel="stylesheet" href="typography.css">
+  <link rel="stylesheet" href="chapter05.css">
+  <link rel="stylesheet" href="radio-ai.css">
+  <script defer src="js/journey.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/radio-ai.js"></script>
+  <script defer src="js/chapter05-data.js"></script>
+  <script defer src="js/chapter05-puzzles.js"></script>
+  <script defer src="js/chapter05.js"></script>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <a class="brand" href="index.html">
+      <span class="brand-icon">雨</span>
+      <span>
+        <small>MỘT CÂU CHUYỆN TRONG LÀNG</small>
+        <strong>Cơn Mưa Lớn</strong>
+      </span>
+    </a>
+    <span class="chapter">CHƯƠNG 05 <i>/</i> ĐỈNH ĐỒI AN TOÀN</span>
+    <div class="header-controls">
+      <button id="btn-radio" class="hud-radio-btn" title="Mở bộ đàm liên lạc cứu hộ (Phím R)">
+        <span class="radio-led-indicator"></span>BỘ ĐÀM AI <kbd>R</kbd>
+      </button>
+      <button id="sound" aria-label="Bật âm thanh">Âm thanh: tắt</button>
+    </div>
+  </header>
+
+  <section id="stage" aria-label="Màn chơi Đỉnh đồi an toàn">
+    <div id="landscape"></div>
+    <div class="grade"></div>
+    <canvas id="rain" aria-hidden="true"></canvas>
+
+    <div id="scene-caption">
+      <small>11:00 · ĐIỂM TẬP KẾT ĐỈNH ĐỒI AN TOÀN</small>
+      <h2 id="scene-name"></h2>
+    </div>
+
+    <aside id="mission">
+      <small>MỤC TIÊU HIỆN TẠI</small>
+      <p id="objective"></p>
+      <span id="progress"></span>
+    </aside>
+
+    <div id="spots"></div>
+
+    <img id="minhanh-world" src="assets/characters/minh-anh/idle.png" alt="Trưởng làng Minh Anh" hidden>
+
+    <div id="party" aria-label="Đoàn di tản hoàn chỉnh">
+      <img class="companion party-manh" src="assets/characters/manh/idle.png" alt="Bác Mạnh">
+      <img class="companion teacher" src="assets/characters/thao/idle.png" alt="Cô Thảo">
+      <img id="player" src="assets/characters/ban/idle.png" alt="Bạn">
+      <img class="companion girl" src="assets/characters/duyen/idle.png" alt="Duyên">
+      <img id="party-minh" class="companion party-minh" src="assets/characters/minh/idle.png" alt="Bạn Minh">
+    </div>
+
+    <div id="location-toast" role="status"></div>
+
+    <div id="intro">
+      <small>CHƯƠNG THỨ NĂM · 11:00 TRƯA</small>
+      <h1>Đỉnh đồi<br><em>An toàn</em></h1>
+      <div class="rule"></div>
+      <p>
+        Vượt qua mọi thử thách sườn đồi và dòng nước lũ, đoàn học sinh và dân phòng đã hội tụ trọn vẹn tại Nhà văn hóa thôn.<br>
+        Bàn giao thực địa cho Trưởng làng Minh Anh, vượt qua bài kiểm tra 5 chương và nhận Chứng Nhận Chiến Sĩ Nhí An Toàn.
+      </p>
+      <button id="start" class="primary">Bước vào điểm tập kết <span>→</span></button>
+      <p id="journey-summary" class="journey-summary" hidden></p>
+      <a href="chapter04.html">← Trở về Chương 04</a>
+      <small class="intro-foot">HỘI QUÂN ĐOÀN KẾT · TỔNG KẾT 5 CHƯƠNG · VINH DANH CHIẾN SĨ AN TOÀN</small>
+    </div>
+
+    <section id="dialogue" hidden aria-label="Hội thoại">
+      <img id="portrait" alt="">
+      <div>
+        <small id="speaker"></small>
+        <p id="line" aria-live="polite"></p>
+      </div>
+      <button id="next">Tiếp tục ↵</button>
+    </section>
+  </section>
+
+  <footer>
+    <span class="help"><kbd>WASD / Mũi tên</kbd> di chuyển · <kbd>E / Click</kbd> tương tác · <kbd>R</kbd> Bộ đàm cứu hộ</span>
+    <nav>
+      <button id="btn-radio-footer" class="hud-radio-btn">Bộ đàm AI <kbd>R</kbd></button>
+      <button id="journal">Sổ tay <kbd>J</kbd></button>
+    </nav>
+    <small id="save">TỰ ĐỘNG LƯU</small>
+  </footer>
+</main>
+
+<div id="modal" hidden>
+  <section id="panel" role="dialog" aria-modal="true" aria-label="Bảng tương tác" tabindex="-1"></section>
+</div>
+</body>
+</html>
