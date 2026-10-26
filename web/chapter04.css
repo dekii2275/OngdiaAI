@@ -355,3 +355,171 @@ kbd {
   #panel { padding: 20px; }
   .match-row { grid-template-columns: 1fr; gap: 8px; }
 }
+
+
+/* === TASK 6: FX CẦU TRE & DÒNG SUỐI LŨ === */
+@keyframes bridge-sway {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-3px, 2px) rotate(-0.8deg); }
+  40% { transform: translate(3px, -2px) rotate(0.9deg); }
+  60% { transform: translate(-2px, 1px) rotate(-0.5deg); }
+  80% { transform: translate(2px, -1px) rotate(0.4deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.bridge-sway {
+  animation: bridge-sway 0.7s ease-in-out infinite;
+}
+
+@keyframes flood-swirl {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.7; }
+  50% { transform: rotate(180deg) scale(1.08); opacity: 0.95; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.7; }
+}
+
+.flood-current {
+  animation: flood-swirl 3.5s linear infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-3px, 1px); }
+  80% { transform: translate(2px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.screen-shake {
+  animation: shake 0.45s ease-in-out;
+}
+
+/* === TACTICAL BRIDGE BLUEPRINT STYLES === */
+.blueprint-card {
+  background: #09171a;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.blueprint-card h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #fff7df;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.blueprint-card p {
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.status-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+.status-caution { background: #876800; color: #fff1b8; }
+.status-warning { background: #ad2102; color: #ffccc7; }
+.status-safe_landing { background: #135200; color: #b7eb8f; }
+
+.tactical-note-box {
+  background: #0a1b22;
+  border: 1px dashed var(--gold);
+  border-radius: 6px;
+  padding: 14px;
+  margin: 14px 0;
+  font-size: 13px;
+  color: #d5bd87;
+  line-height: 1.7;
+}
+
+/* === BAMBOO BRIDGE WASD MINI-GAME STYLES === */
+.bridge-lane {
+  position: relative;
+  height: 90px;
+  background: linear-gradient(180deg, #10262b, #09171b);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.bamboo-beam {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: repeating-linear-gradient(90deg, #8a7346, #8a7346 12px, #5c4d2e 12px, #5c4d2e 24px);
+  border-top: 1px solid #c2a86a;
+  border-bottom: 1px solid #3c321d;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+.swirl-zone {
+  position: absolute;
+  top: 10px;
+  width: 32px;
+  height: 70px;
+  background: radial-gradient(circle, rgba(231,111,81,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.bridge-player-marker {
+  position: absolute;
+  top: 16px;
+  transform: translateX(-50%);
+  font-size: 32px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.7));
+  transition: transform 0.08s ease-out;
+  user-select: none;
+}
+.bridge-balance-bar {
+  position: relative;
+  height: 14px;
+  background: #081214;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.bridge-balance-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  left: 40%;
+  background: #52c41a;
+  border-radius: 4px;
+  transition: left 0.05s linear, background 0.15s;
+}
+.bridge-balance-target {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 34%;
+  left: 33%;
+  border-left: 1px dashed rgba(213,189,135,0.7);
+  border-right: 1px dashed rgba(213,189,135,0.7);
+  background: rgba(82, 196, 26, 0.12);
+  pointer-events: none;
+}
+
+/* === DEBRIEF & BADGE STYLES === */
+.badge-pass {
+  background: #0c2518;
+  border: 1px solid #52c41a;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+.badge-pass b {
+  color: #73d13d;
+  font-size: 15px;
+  display: block;
+  letter-spacing: 1px;
+}
