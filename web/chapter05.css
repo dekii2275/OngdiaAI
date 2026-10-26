@@ -343,6 +343,45 @@ kbd {
 }
 #puzzle-feedback { min-height: 25px; color: var(--gold) !important; font-size: 13px; }
 
+/* FX Animations: Vệt nắng hửng rạng & Bếp lửa reo */
+@keyframes sunrise-glow {
+  0% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.25)) brightness(1);
+  }
+  50% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 35px rgba(255, 215, 0, 0.6)) brightness(1.2);
+  }
+  100% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.25)) brightness(1);
+  }
+}
+
+@keyframes hearth-fire {
+  0% {
+    box-shadow: 0 0 20px rgba(231, 111, 81, 0.4), inset 0 0 15px rgba(244, 162, 97, 0.3);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(231, 111, 81, 0.75), inset 0 0 30px rgba(233, 196, 106, 0.6);
+    filter: brightness(1.25);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(231, 111, 81, 0.4), inset 0 0 15px rgba(244, 162, 97, 0.3);
+    filter: brightness(1);
+  }
+}
+
+.sunrise-glow {
+  animation: sunrise-glow 4s ease-in-out infinite;
+}
+
+.hearth-fire {
+  animation: hearth-fire 2.5s ease-in-out infinite;
+}
+
 /* Certificate Card Styles */
 .cert-card {
   border: 4px double #d5bd87;
@@ -394,6 +433,187 @@ kbd {
   font-size: 12px;
   font-weight: 600;
   color: #d5bd87;
+}
+
+.cert-praise-box {
+  margin: 16px auto;
+  max-width: 620px;
+  background: rgba(213, 189, 135, 0.08);
+  border: 1px dashed #d5bd87;
+  border-radius: 8px;
+  padding: 14px 18px;
+  text-align: left;
+}
+.cert-praise-title {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #d5bd87;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+#cert-praise, #cert-feedback {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #f7ede2;
+  font-style: italic;
+}
+
+/* Mini-Sequence Cổng Đỉnh Đồi (Summit Gate March) */
+.gate-march-lane {
+  position: relative;
+  height: 90px;
+  background: linear-gradient(90deg, #102428 0%, #1c3639 50%, #2b4f4c 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 14px 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.gate-arch-target {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  border-left: 3px dashed #d5bd87;
+  background: rgba(213, 189, 135, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #ffd591;
+}
+.gate-party-marker {
+  position: absolute;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: left 0.1s linear;
+  user-select: none;
+}
+.gate-party-avatar {
+  background: #0d1e22;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.gate-party-info {
+  display: flex;
+  flex-direction: column;
+  background: rgba(13, 30, 34, 0.85);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+/* Tactical Incident Dispatch UI */
+.dispatch-sheet {
+  background: #0a171a;
+  border: 2px solid #5a7d6e;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 14px 0;
+  font-family: var(--font-ui, monospace);
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+.dispatch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d584e;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.dispatch-code {
+  background: #183329;
+  border: 1px solid #52c41a;
+  color: #73d13d;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+.dispatch-content {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #d8e5df;
+  white-space: pre-line;
+}
+.dispatch-stamp {
+  display: inline-block;
+  margin-top: 14px;
+  border: 2px solid #e76f51;
+  color: #e76f51;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  border-radius: 4px;
+}
+
+/* Medical Triage Solver UI */
+.triage-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.triage-tab-btn {
+  background: #0d1e22;
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #c5cbbd;
+}
+.triage-tab-btn.active {
+  background: #1b353a;
+  border-color: var(--gold);
+  color: #ffd591;
+  font-weight: 600;
+}
+.triage-tab-btn.solved {
+  border-color: #52c41a;
+  color: #73d13d;
+}
+.triage-card {
+  background: #0b1c20;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.critique-box {
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.critique-box.approved {
+  background: rgba(82, 196, 26, 0.12);
+  border: 1px solid #52c41a;
+  color: #95de64;
+}
+.critique-box.rejected {
+  background: rgba(231, 111, 81, 0.15);
+  border: 1px solid #e76f51;
+  color: #ffa39e;
 }
 
 @media (max-width: 760px) {
