@@ -64,7 +64,8 @@
       solved: [],
       complete: false,
       started: false,
-      position: { x: 20, y: 85 }
+      position: { x: 20, y: 85 },
+      certPraise: null
     };
   }
 
@@ -88,6 +89,7 @@
     s.solved = Array.isArray(raw.solved) ? [...new Set(raw.solved)] : [];
     s.complete = raw.complete === true;
     s.started = raw.started === true;
+    s.certPraise = typeof raw.certPraise === 'string' ? raw.certPraise : null;
     if (raw.position && Number.isFinite(raw.position.x) && Number.isFinite(raw.position.y)) {
       s.position = { x: raw.position.x, y: raw.position.y };
     }

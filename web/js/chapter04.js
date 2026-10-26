@@ -495,8 +495,8 @@
 
     $('modal').hidden = false;
     $('close-bridge-game').onclick = () => {
+      cleanup();
       $('modal').hidden = true;
-      if (swayTimer) cancelAnimationFrame(swayTimer);
     };
 
     const bStep = $('bridge-step');

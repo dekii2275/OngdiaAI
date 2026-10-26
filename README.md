@@ -1,85 +1,126 @@
-# Game giải đố cốt truyện 2D — Cơn Mưa Lớn & Sau Cơn Mưa (Trọn vẹn 5 Chương)
+# Game Giải Đố Cốt Truyện 2D — Cơn Mưa Lớn & Sau Cơn Mưa (Trọn Vẹn 5 Chương)
 
-**Toàn bộ 5 Chương hành trình sinh tồn và phân đoạn Sau Cơn Mưa đã được tích hợp hoàn chỉnh và đồng bộ 100% về mỹ thuật 2D canvas, cốt truyện liên tục và tích hợp AI Google Gemini thời gian thực.**
+**Phiên bản Nâng Cấp Toàn Diện (Creative & Interactive Architecture): Tích hợp Voice TTS 6 nhân vật, Dynamic FX, Mini-sequence WASD tình huống và 4 Bộ Router AI Google Gemini thông minh.**
+
+Dự án giáo dục tương tác 2D trên nền Canvas & HTML5/CSS3 hiện đại, hướng dẫn học sinh và thanh thiếu niên kỹ năng sống còn, sơ tán phòng tránh lũ quét, sạt lở đất và cứu hộ khẩn cấp tại miền núi Việt Nam.
 
 Chơi trực tiếp tại `http://localhost:4173`:
 - **Chương 01:** Lớp 4B trong giờ ra chơi mưa lớn (`web/index.html`)
 - **Chương 02:** Ba con đường sơ tán (`web/chapter02.html`)
-- **Chương 03:** Vết nứt sườn đồi — Bộ đàm cứu hộ AI (`web/chapter03.html`)
-- **Chương 04:** Chia cắt & Cứu bạn học — Đối thoại thuyết phục AI (`web/chapter04.html`)
-- **Chương 05:** Đỉnh đồi an toàn — Tổng kết 5 chương & Cấp chứng nhận (`web/chapter05.html`)
-- **Phân đoạn "Sau Cơn Mưa":** Dành cho học sinh tiểu học Lớp 3–5 (`web/sau-con-mua.html`)
+- **Chương 03:** Vết nứt sườn đồi — Cứu hộ địa chất & Bộ đàm AI (`web/chapter03.html`)
+- **Chương 04:** Chia cắt & Cứu bạn học — Phác đồ cầu tre & Đàm thoại tâm lý (`web/chapter04.html`)
+- **Chương 05:** Đỉnh đồi an toàn — Tác chiến cứu nạn, Y tế sau bão & Cấp chứng nhận (`web/chapter05.html`)
+- **Phân đoạn "Sau Cơn Mưa":** Hành trình sư phạm dành cho học sinh Lớp 3–5 (`web/sau-con-mua.html`)
 
 ---
 
-## 📻 Hệ Thống Bộ Đàm Cứu Hộ AI (Emergency AI Radio Walkie-Talkie)
+## 🌟 Các Trụ Cột Nâng Cấp Kiến Trúc (Core Innovations)
 
-Hệ thống Bộ đàm AI thời gian thực kết nối trực tiếp với **Google Gemini API** (`gemini-3.5-flash-lite`), cho phép học sinh tương tác tự do với các nhân vật chỉ huy và tiền trạm:
+### 1. 🎙️ Động Cơ Giọng Đọc Phân Vai Voice TTS (Voice TTS Engine)
+Tích hợp Web Speech Synthesis API với cấu hình âm điệu (`pitch`) và tốc độ (`rate`) thiết kế riêng cho **6 nhân vật**, mang lại trải nghiệm thoại nhập vai sống động:
+- **Cô giáo Thảo (`thao`):** Giọng ấm áp, điềm tĩnh, chuẩn mực nhà giáo (`rate: 0.95`, `pitch: 1.05`).
+- **Bác Mạnh cựu chiến binh (`manh`):** Trầm ấm, dứt khoát, phong thái người lính can trường (`rate: 0.9`, `pitch: 0.8`).
+- **Trưởng làng Minh Anh (`minh_anh`):** Uy nghiêm, rành rọt, chỉ đạo quyết đoán (`rate: 0.95`, `pitch: 0.9`).
+- **Bạn Minh (`minh`):** Hơi hoảng loạn, gấp gáp, cảm xúc trẻ thơ (`rate: 1.05`, `pitch: 1.2`).
+- **Bạn Duyên (`duyen`):** Nhỏ nhẹ, lo lắng, cần sự chở che (`rate: 1.0`, `pitch: 1.3`).
+- **Nhân vật người chơi (`ban`):** Đĩnh đạc, rõ ràng, dũng cảm (`rate: 1.0`, `pitch: 1.0`).
+- **Điều khiển trực quan:** Nút HUD toggle âm thanh `[🔊 Giọng đọc: BẬT/TẮT]` hiện diện xuyên suốt 5 chương, lưu trạng thái tự động vào `localStorage`.
 
-### 1. Cách Mở & Sử Dụng Bộ Đàm
-- **Phím tắt nhanh:** Bấm phím `R` trên bàn phím ở bất kỳ thời điểm nào trong Chương 3, 4, 5.
-- **Nút HUD:** Bấm icon `[📶 BỘ ĐÀM AI R]` ở góc trên bên phải hoặc thanh điều hướng chân trang.
-- **Đèn LED [⚡ AI ONLINE]:** Báo hiệu kết nối trực tiếp tới mô hình ngôn ngữ lớn Google Gemini.
+### 2. ⚡ Hiệu Ứng Đồ Họa Cảm Xúc (Dynamic FX & Atmosphere)
+Mỗi phân cảnh đều được tăng cường hiệu ứng thị giác điện ảnh CSS/Canvas:
+- **Screen Shake (Rung Chấn Địa Chấn):** Rung lắc khung nhìn mạnh mẽ khi xảy ra tiếng nổ sườn đồi, đá tảng sạt trượt chặn lối hoặc đá lăn nguy hiểm.
+- **Bridge Sway & Flood Currents (Cầu Tre Đu Đưa & Dòng Lũ Xoáy):** Dòng xoáy nước lũ cuộn bọt đỏ ngầu dưới chân cầu kết hợp mô phỏng con lắc vật lý khiến nhịp cầu tre dao động lắc lư liên tục.
+- **Sunrise Glow (Rạng Đông Hy Vọng):** Vầng hào quang bình minh tỏa sáng ấm áp trên đỉnh đồi xua tan đêm mưa bão kinh hoàng.
+- **Hearth Fire (Ngọn Lửa Sưởi Ấm):** Ánh lửa bập bùng sinh động bên trong Nhà văn hóa cộng đồng, lan tỏa hơi ấm và niềm tin cho các nạn nhân được cứu sống.
 
-### 2. Các Kênh Vô Tuyến Khẩn Cấp (Channels & Personas)
-- **Kênh 1: Trưởng làng Minh Anh (`minh_anh`):** Vị chỉ huy điềm đạm, am hiểu địa hình núi rừng, túc trực tại trạm chỉ huy đỉnh đồi, hướng dẫn các em học sinh di tản an toàn tránh xa vết nứt taluy.
-- **Kênh 2: Bác Mạnh (`manh`):** Thợ điện kiêm đội phó dân phòng dũng cảm, đi tiền trạm thực địa, báo cáo tình hình bùn nhão, đá lăn, cột điện gãy và cống tràn.
-- **Kênh 3: Cô Thảo (`thao`):** Cô giáo chủ nhiệm ấm áp, ân cần nhắc nhở các em giữ chặt tay nhau, không tách đoàn, ưu tiên tính mạng con người là số một.
-- **Kênh 4: Bạn Minh (`minh`):** Học sinh mắc kẹt ở xóm dưới, ban đầu hoảng sợ và tiếc bức tranh kỷ niệm của mẹ; người chơi trò chuyện thuyết phục Minh hiểu "tính mạng là vô giá" để chịu di tản.
+### 3. 🕹️ Cơ Chế Di Chuyển WASD Tình Huống (Situational WASD Traversal)
+Học sinh trực tiếp điều khiển nhân vật vượt qua các thử thách sinh tồn độc đáo ở từng chương:
+- **Chương 1:** Điều khiển bước chân luồn lách qua các dãy bàn ghế nghiêng đổ và hành lang ngập nước.
+- **Chương 2:** Dò từng phiến đá bước dã chiến băng qua dòng nước tràn ngập đường liên thôn.
+- **Chương 3:** Dùng phím điều hướng kết hợp **Gậy Dò Đường** bước trên gờ đá kiên cố để né bùn nhão hút chân.
+- **Chương 4 — Mini-sequence Vượt Cầu Tre Rung Lắc:** Giữ thăng bằng cho bạn Minh bằng phím `A`/`D` (nghiêng người) trong vùng an toàn (33% – 67%) đồng thời nhấn giữ `W`/`Space` để bước tới thận trọng.
+- **Chương 5 — Dẫn Đầu Đội Ngũ An Toàn:** Cầm nhịp bước chân đưa toàn bộ đoàn di tản 5 người vững vàng tiến qua cổng Trạm chỉ huy đỉnh đồi.
 
-### 3. Cơ Chế An Toàn Kỹ Thuật (Zero Crash / Zero Hang)
-- Tích hợp `AbortController` timeout 3500ms.
-- Tự động nạp bộ câu trả lời fallback an toàn nếu mất mạng hoặc quá tải API.
-- Đảm bảo 100% không bao giờ làm treo hay đơ tiến trình chơi game.
+### 4. 🧠 Bộ Tứ Router AI Google Gemini Thông Minh (AI Backend Handlers)
+Hệ thống kết nối trực tiếp mô hình **Google Gemini 2.5/3.5 Flash Lite** (kèm bộ Fallback chuẩn quân sự bảo đảm Zero-Hang / Không bao giờ treo game):
+1. **Khảo Hạch AI Vấn Đáp Cuối Mỗi Chương (`/api/debrief/evaluate`):**
+   - Đánh giá câu trả lời tự luận của người chơi về bài học sinh tồn của chương.
+   - Khắt khe từ chối các câu trả lời liều mạng (quay lại lấy tiền bạc, trèo qua đá lăn, lội qua nước sâu) và cấp thẻ **PASS CHƯƠNG** khi học sinh hiểu thấu đáo nguyên tắc "Tính mạng là trên hết".
+2. **Phác Đồ Cầu Tre Chiến Thuật (`/api/tactical/bridge-blueprint`):**
+   - Giám định 3 điểm dị thường (mối mộc đầu cầu, thân tre trơn trượt giữa dòng, mố đá sạt trượt bờ đối diện).
+   - Xuất phác đồ phân bổ phân khu nguy hiểm và quy tắc bước đi an toàn.
+3. **Biên Tập Bức Điện Quân Báo Cứu Nạn (`/api/tactical/incident-dispatch`):**
+   - Tổng hợp toàn bộ hiểm họa thực địa trên toàn tuyến (sạt taluy âm, đứt gãy điện lực, chia cắt cô lập).
+   - Soạn thảo bức điện khẩn cấp chuẩn nghi thức quốc phòng gửi Ban Chỉ huy Tìm kiếm Cứu nạn Huyện.
+4. **Phản Biện Khủng Hoảng Y Tế Sau Bão (`/api/medical/triage-solver`):**
+   - Giải quyết 3 ca khẩn cấp theo phác đồ y khoa hiện đại:
+     * *Ca 1 — Hạ thân nhiệt:* Lau khô, ủ ấm nhiều lớp, uống nước gừng đường ấm, kiên quyết chống cạo gió hay hơ sát lửa bỏng.
+     * *Ca 2 — Vết thương rách sâu nhiễm bẩn:* Rửa nước muối sinh lý, sát khuẩn povidone iodine, băng ép vô trùng cầm máu; loại trừ việc đắp lá cây/bùn đất hoại tử.
+     * *Ca 3 — Ngạt khí than phòng kín (CO Hazard):* Khẩn cấp mở toang cửa sổ thông khí và dập tắt di chuyển lò than ra hiên thoáng.
+
+### 5. 📜 Giấy Chứng Nhận Vinh Danh Cá Nhân Hóa (Personalized Certificate)
+Sau khi vượt qua Khảo Hạch Tốt Nghiệp Toàn Khóa ở Chương 5:
+- AI phân tích phong cách chỉ huy và các quyết định của người chơi để **khắc lời khen danh dự cá nhân hóa** trực tiếp lên Giấy Chứng Nhận.
+- Lời khen được lưu trữ vĩnh viễn trong State Storage (`certPraise`), tự động hiển thị lại khi xem bằng khen hoặc tải lại trang.
 
 ---
 
-## 🗺️ Tóm Tắt Trọn Vẹn Hành Trình 5 Chương (Full Journey)
+## 🗺️ Tóm Tắt Trọn Vẹn 5 Chương Cốt Truyện
 
-1. **Chương 01: Lớp 4B Trong Mưa Lớn (`index.html`)**
-   - 09:00 sáng. Chuông báo động mưa lũ vang lên.
-   - Quan sát dấu hiệu nước ngập cửa sổ, lấy ba lô khẩn cấp, đưa ra quyết định có lấy gấu bông của Duyên hay ưu tiên sơ tán cùng Cô Thảo ra cổng sau.
-2. **Chương 02: Ba Con Đường Sơ Tán (`chapter02.html`)**
-   - Đứng trước 3 con đường: Tuyến A (chân đồi dốc), Tuyến B (cầu treo rung lắc), Tuyến C (đường vòng phía Bắc 650m).
-   - Kiểm tra kỹ 13 dấu hiệu thực địa cùng Bác Mạnh. Nhận ra "đường gần nhất chưa chắc là an toàn nhất". Vượt Cầu Bắc an toàn.
-3. **Chương 03: Vết Nứt Sườn Đồi (`chapter03.html`)**
-   - Đoạn đường men dốc xuất hiện vết nứt hình vòng cung D1, bụi tre nghiêng bật rễ và nước đùn sủi tăm.
-   - Bấm `R` gọi Bộ đàm AI cho Trưởng làng Minh Anh để xin chỉ đạo.
-   - Nhận diện nguy cơ bão hòa áp lực nước lỗ rỗng, giải câu đố chọn lối mòn sống đá gốc vòng qua tảng đá chắn đường.
-4. **Chương 04: Chia Cắt & Cứu Bạn Học (`chapter04.html`)**
-   - Xóm đồi phía dưới bị nước lũ chia cắt. Tìm thấy bạn Minh đang khóc đòi quay lại trường tìm bức tranh vẽ tặng mẹ.
-   - Đàm thoại AI thuyết phục bạn: "Mẹ chỉ cần Minh an toàn trở về. Tranh có thể vẽ lại sau."
-   - Gia cố thanh giằng và tổ chức đội hình qua cầu tre dã chiến an toàn.
-5. **Chương 05: Đỉnh Đồi An Toàn (`chapter05.html`)**
-   - Hội quân trọn vẹn đoàn 5 người tại Nhà văn hóa thôn trên đỉnh đồi cùng Trưởng làng Minh Anh.
-   - Bàn giao tọa độ các điểm nguy hiểm trên đường đi.
-   - Vượt qua Bài trắc nghiệm tổng hợp 5 chương và nhận **Chứng Nhận Chiến Sĩ Nhí An Toàn Phòng Chống Thiên Tai**.
-
----
-
-## 🛠️ Hướng Dẫn Cài Đặt & Chạy Server
-
-### 1. Cài đặt và cấu hình
-```powershell
-# Cài đặt dependencies (nếu chưa có)
-npm install
-
-# Kiểm tra file .env tại thư mục gốc:
-# GEMINI_API_KEY=your_gemini_api_key
+```
+[Chương 1: Lớp 4B Trong Mưa Lớn]
+       │
+       ▼ (Bàn giao Handoff: Quyết định ba lô & gấu bông)
+[Chương 2: Ba Con Đường Sơ Tán]
+       │
+       ▼ (Đánh giá dòng lũ & Vượt Cầu Bắc)
+[Chương 3: Vết Nứt Sườn Đồi & Cứu Hộ Địa Chất]
+       │
+       ▼ (Bộ đàm AI kênh Trưởng làng & Can ngăn Bác Mạnh)
+[Chương 4: Chia Cắt & Cứu Bạn Học]
+       │
+       ▼ (Thuyết phục Minh, Phác đồ cầu tre & WASD vượt cầu)
+[Chương 5: Đỉnh Đồi An Toàn & Tổng Kết Toàn Tuyến]
+       │
+       ▼ (Điện báo Huyện, Xử lý Y tế 3 ca & Nhận Bằng Khen Khắc Tên)
+[CHỨNG NHẬN CHIẾN SĨ AN TOÀN PHÒNG CHỐNG THIÊN TAI]
 ```
 
-### 2. Khởi động server
+---
+
+## 🛠️ Hướng Dẫn Cài Đặt & Khởi Chạy
+
+### 1. Cài Đặt Môi Trường
+Yêu cầu: Node.js phiên bản $\ge 18.0.0$.
+```powershell
+# Cài đặt dependencies
+npm install
+
+# Cấu hình khóa API Google Gemini trong file .env (nếu có):
+# GEMINI_API_KEY=your_actual_gemini_api_key
+```
+
+*(Lưu ý: Hệ thống đã tích hợp sẵn cơ chế Safe Mock Fallback tự động nhận diện nếu chưa cấu hình API Key hoặc khi mạng gián đoạn, đảm bảo trải nghiệm chơi mượt mà 100%).*
+
+### 2. Chạy Ứng Dụng
 ```powershell
 npm start
 ```
-Truy cập: `http://localhost:4173`
+Mở trình duyệt truy cập: `http://localhost:4173`
 
 ---
 
-## 🧪 Chạy Kiểm Thử Tự Động (Full Regression Test Suite)
+## 🧪 Hệ Thống Kiểm Thử Tự Động Toàn Diện (Full Test Suite)
 
-Chạy toàn bộ bộ test kiểm thử tự động xuyên suốt từ Chương 1 đến Chương 5 và phân đoạn Sau Cơn Mưa:
+Dự án sở hữu bộ kiểm thử tự động toàn diện với **160+ bài kiểm thử** (Node.js Test Runner tiêu chuẩn), bao quát:
+- Tính hợp lệ của cấu trúc dữ liệu hành trình 5 chương (`journey.js`).
+- Động cơ TTS phân vai 6 nhân vật và điều khiển phát âm thanh.
+- Tính chính xác của cả 4 Router Backend AI (Gemini Live & Fallback).
+- Kiểm tra toàn vẹn tài sản đồ họa (ảnh chân dung nhân vật, hình nền 2D WebP).
+- Luồng kiểm thử hồi quy tích hợp E2E từ Chương 1 đến Chương 5 (`tests/full-5-chapters-regression.test.cjs`).
+
+Chạy lệnh kiểm thử:
 ```powershell
 npm test
 ```
-Tất cả các bài kiểm thử đều chạy trên nền Node.js test runner tiêu chuẩn với thời gian thực thi cực nhanh và độ tin cậy tuyệt đối.
+Tất cả các bài kiểm thử đều đạt chuẩn 100% PASS, không lỗi, không hồi quy.

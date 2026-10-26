@@ -160,6 +160,10 @@
     }
 
     if (p.id === 'blocked_path') {
+      if (!s.clues.includes('blocked_path')) {
+        s.clues.push('blocked_path');
+        save();
+      }
       triggerScreenShake(450);
       showManhDissuadeModal();
       return;
@@ -407,6 +411,9 @@
       }
 
       s.manhDissuaded = true;
+      if (!s.clues.includes('blocked_path')) {
+        s.clues.push('blocked_path');
+      }
       save();
       if (audio) audio.play('unlock');
       $('manh-dissuade-status').textContent = '✓ Bác Mạnh đã đồng thuận!';
