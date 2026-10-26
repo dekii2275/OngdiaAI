@@ -55,6 +55,22 @@
     })
   });
 
+  function _normalizeSpeakerKey(speaker) {
+    if (!speaker || typeof speaker !== 'string') return 'ban';
+    const s = speaker.trim().toLowerCase();
+    if (VOICE_PROFILES[s]) return s;
+
+    // Check compound / multi-word names first before short names
+    if (s.includes('minh anh') || s.includes('minh_anh')) return 'minh_anh';
+    if (s.includes('thảo') || s.includes('thao')) return 'thao';
+    if (s.includes('mạnh') || s.includes('manh')) return 'manh';
+    if (s.includes('duyên') || s.includes('duyen')) return 'duyen';
+    if (s.includes('minh')) return 'minh';
+    if (s.includes('bạn') || s.includes('ban') || s.includes('người chơi')) return 'ban';
+
+    return 'ban';
+  }
+
   let _enabled = true;
   let _cachedVoice = null;
 
@@ -104,6 +120,15 @@
   const VoiceTTS = {
     VOICE_PROFILES,
 
+    normalizeSpeaker(speaker) {
+      return _normalizeSpeakerKey(speaker);
+    },
+
+    getProfile(speaker) {
+      const key = _normalizeSpeakerKey(speaker);
+      return VOICE_PROFILES[key] || VOICE_PROFILES.ban;
+    },
+
     isEnabled() {
       return _enabled;
     },
@@ -147,7 +172,8 @@
       try {
         this.stop();
 
-        const profile = VOICE_PROFILES[speaker] || VOICE_PROFILES.ban || { rate: 1.0, pitch: 1.0 };
+        const profileKey = _normalizeSpeakerKey(speaker);
+        const profile = VOICE_PROFILES[profileKey] || VOICE_PROFILES.ban || { rate: 1.0, pitch: 1.0 };
         const utter = new UtteranceClass(text);
         utter.lang = 'vi-VN';
 

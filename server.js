@@ -23,6 +23,36 @@ const types = {
   '.ttf': 'font/ttf' 
 };
 const port = Number(process.env.PORT || 4173);
+
+const MAX_BODY_SIZE = 1024 * 1024; // 1MB size limit
+
+function handleJsonPost(req, res, handler) {
+  let body = '';
+  let exceeded = false;
+  req.on('data', chunk => {
+    if (exceeded) return;
+    body += chunk;
+    if (body.length > 1024 * 1024) {
+      exceeded = true;
+      res.writeHead(413, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ error: 'Payload Too Large' }));
+      req.destroy();
+    }
+  });
+  req.on('end', async () => {
+    if (exceeded) return;
+    try {
+      const data = JSON.parse(body || '{}');
+      const result = await handler(data);
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+  });
+}
+
 const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); }
@@ -30,130 +60,70 @@ const server = http.createServer((req, res) => {
 
   // API Route: Sau Con Mua NPC Reply
   if (req.method === 'POST' && pathname === '/api/sau-con-mua/npc-reply') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await selectNpcReply({
-          requestId: data.request_id || 'req-' + Date.now(),
-          stageRevision: Number(data.stage_revision || 0),
-          playerText: String(data.player_text || '')
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return selectNpcReply({
+        requestId: data.request_id || 'req-' + Date.now(),
+        stageRevision: Number(data.stage_revision || 0),
+        playerText: String(data.player_text || '')
+      });
     });
     return;
   }
 
   // API Route: Emergency Rescue AI Radio Chat
   if (req.method === 'POST' && pathname === '/api/radio/chat') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await handleRadioChat({
-          channel: data.channel || 'minh_anh',
-          playerName: data.playerName || 'Bạn',
-          message: data.message || '',
-          chapter: Number(data.chapter || 3),
-          scene: data.scene || ''
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return handleRadioChat({
+        channel: data.channel || 'minh_anh',
+        playerName: data.playerName || 'Bạn',
+        message: data.message || '',
+        chapter: Number(data.chapter || 3),
+        scene: data.scene || ''
+      });
     });
     return;
   }
 
   // API Route: Debrief Evaluate (Khảo hạch pass chương)
   if (req.method === 'POST' && pathname === '/api/debrief/evaluate') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await handleChapterDebrief({
-          chapter: data.chapter,
-          question: data.question,
-          playerAnswer: data.playerAnswer !== undefined ? data.playerAnswer : data.player_answer
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return handleChapterDebrief({
+        chapter: data.chapter,
+        question: data.question,
+        playerAnswer: data.playerAnswer !== undefined ? data.playerAnswer : data.player_answer
+      });
     });
     return;
   }
 
   // API Route: Tactical Bridge Blueprint (Phác đồ vượt cầu tre)
   if (req.method === 'POST' && pathname === '/api/tactical/bridge-blueprint') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await handleBridgeBlueprint({
-          inspectionData: data.inspectionData,
-          inspection: data.inspection
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return handleBridgeBlueprint({
+        inspectionData: data.inspectionData,
+        inspection: data.inspection
+      });
     });
     return;
   }
 
   // API Route: Tactical Incident Dispatch (Bức điện cứu nạn Huyện)
   if (req.method === 'POST' && pathname === '/api/tactical/incident-dispatch') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await handleIncidentDispatch({
-          hazards: data.hazards
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return handleIncidentDispatch({
+        hazards: data.hazards
+      });
     });
     return;
   }
 
   // API Route: Medical Triage Solver (Cố vấn y tế 3 ca khủng hoảng)
   if (req.method === 'POST' && pathname === '/api/medical/triage-solver') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(body || '{}');
-        const result = await handleMedicalTriage({
-          caseId: data.caseId !== undefined ? data.caseId : data.case_id,
-          solutionText: data.solutionText !== undefined ? data.solutionText : data.solution_text
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify(result));
-      } catch (e) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ error: e.message }));
-      }
+    handleJsonPost(req, res, async (data) => {
+      return handleMedicalTriage({
+        caseId: data.caseId !== undefined ? data.caseId : data.case_id,
+        solutionText: data.solutionText !== undefined ? data.solutionText : data.solution_text
+      });
     });
     return;
   }
@@ -174,12 +144,18 @@ const server = http.createServer((req, res) => {
     res.end(data);
   });
 });
-server.listen(port, '127.0.0.1', () => {
-  const url = `http://localhost:${port}`;
-  console.log(`Ongdia Game Server: ${url}\nPress Ctrl+C to stop.`);
-  if (process.argv.includes('--open') && process.platform === 'win32') {
-    const opener = require('node:child_process').spawn('cmd.exe', ['/c', 'start', '', url], { windowsHide: true, stdio: 'ignore' });
-    opener.on('error', () => console.log(`Open this address in your browser: ${url}`));
-  }
-});
-server.on('error', error => { console.error(error.message); process.exitCode = 1; });
+if (require.main === module) {
+  server.listen(port, '127.0.0.1', () => {
+    const url = `http://localhost:${port}`;
+    console.log(`Ongdia Game Server: ${url}\nPress Ctrl+C to stop.`);
+    if (process.argv.includes('--open') && process.platform === 'win32') {
+      const opener = require('node:child_process').spawn('cmd.exe', ['/c', 'start', '', url], { windowsHide: true, stdio: 'ignore' });
+      opener.on('error', () => console.log(`Open this address in your browser: ${url}`));
+    }
+  });
+  server.on('error', error => { console.error(error.message); process.exitCode = 1; });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { server, handleJsonPost };
+}
